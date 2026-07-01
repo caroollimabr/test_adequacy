@@ -21,7 +21,7 @@ In the command line,
 ## 4. Execution and Reports
 In the command line,
 * Access the automated E2E web test project folder;
-* Run `webtev concov --openapi=<openapi_file.json or openapi_file.yaml> --har=<.log_folder>` to create a contract coverage report;
+* Run `webtev concov --openapi=<openapi_file.json or openapi_file.yaml> --har=<./log_folder>` to create a contract coverage report;
 * Run `  webtev reqcov <requirements_file.pdf> <test_folder>` to create a repeatable requirements coverage report.
 
 # SpringEspressoE2E: a Playwright automation
