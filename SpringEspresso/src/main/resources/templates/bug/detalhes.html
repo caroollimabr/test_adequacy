@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Bug</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1>Detalhes do Bug #<span th:text="${bug.id}"></span></h1>
+    
+    <div th:if="${mensagemSucesso}" class="message-box success">
+        <p th:text="${mensagemSucesso}"></p>
+    </div>
+    <div th:if="${mensagemFalha}" class="message-box error">
+        <p th:text="${mensagemFalha}"></p>
+    </div>
+    
+    <div class="card" style="margin-bottom: 20px;">
+        <div style="margin-bottom: 15px;">
+            <strong>Status:</strong>
+            <span th:if="${bug.resolvido}" class="status-badge" 
+                  style="background-color: #28a745; color: white; margin-left: 10px;">Resolvido</span>
+            <span th:if="${!bug.resolvido}" class="status-badge" 
+                  style="background-color: #dc3545; color: white; margin-left: 10px;">Aberto</span>
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <strong>Criticidade:</strong>
+            <span th:if="${bug.criticidade != null}" 
+                  class="status-badge" 
+                  th:style="'background-color: ' + ${bug.criticidade.cor} + '; color: white; margin-left: 10px;'"
+                  th:text="${bug.criticidade.descricao}"></span>
+            <span th:if="${bug.criticidade == null}" 
+                  class="status-badge" 
+                  style="background-color: #6c757d; color: white; margin-left: 10px;">N/A</span>
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <strong>Sessão:</strong> 
+            <a th:href="@{/sessoes/detalhes/{id}(id=${bug.sessao.id})}" th:text="${bug.sessao.descricao}"></a>
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <strong>Data de Registro:</strong> 
+            <span th:text="${#temporals.format(bug.dataRegistro, 'dd/MM/yyyy HH:mm:ss')}"></span>
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <strong>Descrição:</strong>
+            <div style="white-space: pre-wrap; padding: 10px; background-color: #f9f9f9; border-radius: 4px; margin-top: 5px;" 
+                 th:text="${bug.descricao}"></div>
+        </div>
+        
+        <div th:if="${bug.caminhoArquivo != null}" style="margin-bottom: 15px;">
+            <strong>Anexo:</strong>
+            <div style="margin-top: 10px;">
+                <!-- IMAGEM -->
+                <div th:if="${bug.tipoArquivo != null and bug.tipoArquivo.name() == 'IMAGEM'}">
+                    <img th:src="@{'/uploads/' + ${bug.caminhoArquivo}}" 
+                         alt="Screenshot do bug" 
+                         style="max-width: 100%; border: 1px solid #ddd; border-radius: 4px;"/>
+                </div>
+                
+                <!-- VIDEO -->
+                <div th:if="${bug.tipoArquivo != null and bug.tipoArquivo.name() == 'VIDEO'}">
+                    <video controls style="max-width: 100%; border: 1px solid #ddd; border-radius: 4px;">
+                        <source th:src="@{'/uploads/' + ${bug.caminhoArquivo}}" type="video/mp4">
+                        <source th:src="@{'/uploads/' + ${bug.caminhoArquivo}}" type="video/webm">
+                        Seu navegador não suporta a tag de vídeo.
+                    </video>
+                </div>
+            </div>
+        </div>
+                <!-- PODER RESOLVER ELE MESMO COM SESSÃO DE TESTES FINALIZADA -->
+        <form th:if="${!bug.resolvido}" 
+              sec:authorize="hasRole('ROLE_ADMIN')"
+              th:action="@{/bugs/resolver}" 
+              method="post" 
+              style="display: inline; margin-left: 10px;">
+            <input type="hidden" name="bugId" th:value="${bug.id}"/>
+            <input type="hidden" name="sessaoId" th:value="${bug.sessao.id}"/>
+            <button type="submit" class="button button-primary" 
+                    onclick="return confirm('Marcar este bug como resolvido?')">
+                Marcar como Resolvido
+            </button>
+        </form>
+    </div>
+    
+    <!-- AÇOES -->
+    <div style="margin-bottom: 20px;">
+        <a th:href="@{/sessoes/detalhes/{id}(id=${bug.sessao.id})}" 
+           class="button button-secondary">Voltar para Sessão</a>
+           
+
+        
+        <!-- REABRIR BUG -->
+        <form th:if="${bug.resolvido}" 
+              sec:authorize="hasRole('ROLE_ADMIN')"
+              th:action="@{/bugs/reabrir}" 
+              method="post" 
+              style="display: inline; margin-left: 10px;">
+            <input type="hidden" name="bugId" th:value="${bug.id}"/>
+            <input type="hidden" name="sessaoId" th:value="${bug.sessao.id}"/>
+            <button type="submit" class="button button-warning" 
+                    onclick="return confirm('Reabrir este bug?')">
+                Reabrir Bug
+            </button>
+        </form>
+
+        
+        <a
+        th:href="@{/bugs/listar}"
+        class="button button-secondary"
+        style="margin-left: 10px;">
+            Voltar para Lista de Bugs
+        </a>
+
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

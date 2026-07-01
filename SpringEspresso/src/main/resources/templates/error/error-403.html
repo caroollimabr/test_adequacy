@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Erro 403</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <div style="text-align: center; padding: 50px 20px;">
+        <h1 style="color: #e74c3c; font-size: 3em; margin-bottom: 20px;">403</h1>
+        <h2 th:text="#{erro.403.titulo}">Erro 403 - Acesso Negado</h2>
+        <p style="color: #666; font-size: 1.2em; margin-bottom: 30px;" th:text="#{erro.403.mensagem}">Você não tem permissão para acessar este recurso.</p>
+        <a th:href="@{/home}" class="button button-primary" th:text="#{erro.voltar}">Voltar ao Menu Principal</a>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

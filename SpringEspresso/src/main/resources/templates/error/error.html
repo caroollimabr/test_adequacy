@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Erro</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1>Ocorreu um Erro!</h1>
+    <div class="message-box error">
+        <p>Um erro inesperado aconteceu. Por favor, tente novamente mais tarde.</p>
+        <p th:if="${statusCode}">Status: <span th:text="${statusCode}"></span></p>
+        <p th:if="${message}">Mensagem: <span th:text="${message}"></span></p>
+        <p th:if="${path}">Caminho: <span th:text="${path}"></span></p>
+        <p th:if="${timestamp}">Data/Hora: <span th:text="${#temporals.format(timestamp, 'dd-MM-yyyy HH:mm:ss')}"></span></p>
+    </div>
+    <p class="text-center"><a th:href="@{/home}" class="button button-primary">Voltar para o Início</a></p>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

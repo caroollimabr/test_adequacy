@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${tituloPagina != null ? tituloPagina : 'Sessões de Teste'}"></title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <style>
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: white;
+            font-size: 0.8em;
+            text-transform: uppercase;
+        }
+        .status-criado { background-color: #007bff; }
+        .status-em_execucao { background-color: #ffc107; color: #212529; }
+        .status-finalizado { background-color: #28a745; }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: auto;
+        }
+        .table th, .table td {
+            padding: 12px 8px;
+            word-break: break-word;
+        }
+        .table .actions {
+            white-space: nowrap;
+            width: 1%;
+        }
+        .table .status-col {
+            width: 10%;
+        }
+        .table .tester-col {
+            width: 12%;
+        }
+        .table .duracao-col {
+            width: 5%;
+        }
+        .table .descricao-col {
+            width: 58%;
+        }
+    </style>
+</head>
+<body>
+
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1 th:text="${tituloPagina != null ? tituloPagina : 'Sessões de Teste'}"></h1>
+    
+    <div th:if="${estrategia != null}" class="card" style="margin-bottom: 20px;">
+
+        <h3 style="margin-bottom: 5px;"><strong th:text="${estrategia.nome}"></strong></h3>
+        <p th:if="${estrategia.descricao != null and not #strings.isEmpty(estrategia.descricao)}" 
+           style="margin: 0; color: #666; font-size: 0.9em;" 
+           th:text="${estrategia.descricao}"></p>
+    </div>
+
+    <div th:if="${mensagemSucesso}" class="message-box success">
+        <p th:text="${mensagemSucesso}"></p>
+    </div>
+    <div th:if="${mensagemFalha}" class="message-box error">
+        <p th:text="${mensagemFalha}"></p>
+    </div>
+
+    <p>
+        <a th:href="@{/sessoes/cadastro(projetoId=${projeto.id}, estrategiaId=${estrategia.id})}" class="button button-primary">+ Nova Sessão</a>
+    </p>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th class="status-col">Status</th>
+            <th class="tester-col">Tester</th>
+            <th class="duracao-col">Duração (min)</th>
+            <th class="descricao-col">Descrição</th>
+            <th class="actions">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="sessao : ${sessoes}">
+            <td class="status-col">
+                <span th:text="${sessao.status.getDescricao()}"
+                      th:classappend="'status-' + ${#strings.toLowerCase(sessao.status.name())}"
+                      class="status-badge">
+                </span>
+            </td>
+            <td class="tester-col" th:text="${sessao.tester != null ? sessao.tester.nome : 'Não atribuído'}"></td>
+            <td class="duracao-col" th:text="${sessao.duracao != null ? sessao.duracao.toMinutes() : 'N/A'}"></td>
+            <td class="descricao-col" th:text="${sessao.descricao}"></td>
+            <td class="actions">
+                <a th:href="@{/sessoes/detalhes/{id}(id=${sessao.id})}" class="button button-secondary small">Detalhes</a>
+                <th:block
+                        th:if="${sessao.status.name() == 'CRIADO' and (#authorization.expression('hasRole(''ADMIN'')') or (sessao.tester != null and #authentication.principal.email == sessao.tester.email))}">
+                    <form th:action="@{/sessoes/excluir/{id}(id=${sessao.id})}" method="post"  onsubmit="return confirm('Tem certeza que deseja excluir esta sessão?');">
+                        <button type="submit" class="button button-secondary small">Excluir</button>
+                    </form>
+                </th:block>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(sessoes)}">
+            <td colspan="5" style="text-align: center;">Nenhuma sessão encontrada.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p>
+        <a th:href="@{/}" class="button button-secondary" style="margin-top: 15px;">Main Menu</a>
+        <a th:href="@{/projetos/detalhes/{id}(id=${projeto.id})}" class="button button-secondary">Voltar ao Projeto</a>
+    </p>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

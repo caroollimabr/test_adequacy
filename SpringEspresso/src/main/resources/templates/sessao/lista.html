@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Sessões de Teste - ' + ${projeto.nome()}"></title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <style>
+        a.button-secondary,
+        button.button-secondary {
+            display: inline-block;
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #e7e7e7;
+            color: #333;
+            font-family: inherit;
+            font-size: inherit;
+            text-decoration: none;
+            cursor: pointer;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        a.button-secondary:hover,
+        button.button-secondary:hover {
+            background-color: #d4d4d4;
+        }
+
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: white;
+            font-size: 0.8em;
+            text-transform: uppercase;
+        }
+
+        .status-criado {
+            background-color: #007bff;
+        }
+
+        .status-em_execucao {
+            background-color: #cc0a0a;
+        }
+
+        .status-finalizado {
+            background-color: #28a745;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: auto;
+        }
+
+        .table th, .table td {
+            padding: 12px 8px;
+            word-break: normal;
+        }
+
+        .table th:nth-child(1) { width: 25%; }
+        .table th:nth-child(2) { width: 25%; }
+        .table th:nth-child(3) { width: 15%; }
+        .table th:nth-child(4) { width: 10%; }
+        .table th:nth-child(5) { width: 25%; }
+    </style>
+</head>
+<body>
+
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1 th:text="'Sessões de Teste do Projeto: ' + ${projeto.nome()}"></h1>
+
+    <div th:if="${mensagemSucesso}" class="message-box success">
+        <p th:text="${mensagemSucesso}"></p>
+    </div>
+    <div th:if="${mensagemFalha}" class="message-box error">
+        <p th:text="${mensagemFalha}"></p>
+    </div>
+
+    <p>
+        <a th:href="@{/sessoes/cadastro(projetoId=${projeto.id()})}" class="button button-primary">Nova Sessão de
+            Teste</a>
+    </p>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Tester Responsável</th>
+            <th>Estratégia</th>
+            <th>Duração (min)</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="sessao : ${sessoes}">
+            <td th:text="${sessao.tester.nome}"></td>
+            <td th:text="${sessao.estrategia.nome}"></td>
+            <td th:text="${sessao.duracao.toMinutes()}"></td>
+            <td>
+        <span th:text="${sessao.status.name()}" class="status-badge"
+              th:classappend="${'status-' + #strings.toLowerCase(sessao.status.name())}">
+        </span>
+            </td>
+            <td>
+                <th:block
+                        th:if="${sessao.status.name() == 'CRIADO' and (#authorization.expression('hasRole(''ADMIN'')') or #authentication.principal.email == sessao.tester.email)}">
+                    <a th:href="@{/sessoes/editar/{id}(id=${sessao.id})}" class="button button-secondary">Editar</a>
+                    <form th:action="@{/sessoes/deletar}" method="post"
+                          style="display: inline-block; margin: 0; padding: 0;">
+                        <input type="hidden" name="sessaoId" th:value="${sessao.id}"/>
+                        <input type="hidden" name="projetoId" th:value="${sessao.projeto.id}"/>
+                        <button type="submit" class="button button-secondary"
+                                onclick="return confirm('Tem certeza que deseja excluir esta sessão de teste? Esta ação não pode ser desfeita.');">
+                            Excluir
+                        </button>
+                    </form>
+
+                </th:block>
+                <a th:href="@{/sessoes/{id}(id=${sessao.id})}" class="button button-secondary">Ver Detalhes</a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(sessoes)}">
+            <td colspan="5" style="text-align: center;">Nenhuma sessão de teste encontrada para este projeto.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p>
+        <a th:href="@{/projetos/listar}" class="button button-secondary">Voltar para a Lista de Projetos</a>
+        <a th:href="@{/home}" class="button button-secondary">Voltar ao Início</a>
+    </p>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

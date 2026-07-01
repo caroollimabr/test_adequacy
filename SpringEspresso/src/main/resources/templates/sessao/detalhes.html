@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes da Sessão</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <style>
+        .historico-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .historico-table th, .historico-table td {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .historico-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        .historico-table .status-badge {
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .status-criado { background-color: #007bff; color: white; border-radius: 8px;}
+        .status-em_execucao { background-color: #ffc107; color: #212529; border-radius: 8px;}
+        .status-finalizado { background-color: #28a745; color: white; border-radius: 8px;}
+    </style>
+</head>
+<body>
+
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1>Detalhes da Sessão</h1>
+    
+    <div th:if="${mensagemSucesso}" class="message-box success">
+        <p th:text="${mensagemSucesso}"></p>
+    </div>
+    <div th:if="${mensagemFalha}" class="message-box error">
+        <p th:text="${mensagemFalha}"></p>
+    </div>
+
+    <!-- INFORMACOES -->
+    <div class="card" style="margin-bottom: 20px;">
+        <h3>Informações Gerais</h3>
+        <div style="margin-bottom: 10px;">
+            <strong>Projeto:</strong> <span th:text="${sessao.projeto.nome}"></span>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <strong>Estratégia:</strong> <span th:text="${sessao.estrategia.nome}"></span>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <strong>Tester Responsável:</strong> 
+            <span th:text="${sessao.tester != null ? sessao.tester.nome : 'Não atribuído'}"></span>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <strong>Duração:</strong> 
+            <span th:text="${sessao.duracao != null ? sessao.duracao.toMinutes() + ' minutos' : 'N/A'}"></span>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <strong>Status Atual:</strong>
+            <span th:text="${sessao.status.getDescricao()}"
+                  th:classappend="'status-' + ${#strings.toLowerCase(sessao.status.name())}"
+                  class="status-badge">
+            </span>
+        </div>
+
+        <!-- HISTORICO -->
+        <div class="card" style="margin-bottom: 20px;">
+            <h3>Histórico da Sessão</h3>
+            <table class="historico-table">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Data/Hora</th>
+                        <th>Observações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span class="status-badge status-criado">Criado</span>
+                        </td>
+                        <td th:text="${#temporals.format(sessao.dataCriacao, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td>Sessão criada no sistema</td>
+                    </tr>
+                    <tr th:if="${sessao.dataInicioExecucao != null}">
+                        <td>
+                            <span class="status-badge status-em_execucao">Em Execução</span>
+                        </td>
+                        <td th:text="${#temporals.format(sessao.dataInicioExecucao, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td>Sessão iniciada pelo tester</td>
+                    </tr>
+                    <tr th:if="${sessao.dataFinalizacao != null}">
+                        <td>
+                            <span class="status-badge status-finalizado">Finalizado</span>
+                        </td>
+                        <td th:text="${#temporals.format(sessao.dataFinalizacao, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td th:text="${sessao.dataFinalizacao != null and sessao.dataInicioExecucao != null and sessao.duracao != null and sessao.dataFinalizacao.isAfter(sessao.dataInicioExecucao.plus(sessao.duracao)) ? 'Sessão finalizada automaticamente por tempo expirado' : 'Sessão concluída'}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- DESCRICAO -->
+    <div class="card" style="margin-bottom: 20px;">
+        <h3>Descrição</h3>
+        <div style="white-space: pre-wrap; padding: 10px; background-color: #f9f9f9; border-radius: 4px;" 
+             th:text="${sessao.descricao}"></div>
+    </div>
+
+    <!-- BUGS -->
+    <div class="card" style="margin-bottom: 20px;">
+        <h3>Bugs Encontrados</h3>
+        <div th:if="${#lists.isEmpty(sessao.bugs)}" class="message-box info">
+            <p>Nenhum bug foi registrado nesta sessão ainda.</p>
+        </div>
+        
+        <div th:if="${!#lists.isEmpty(sessao.bugs)}">
+            <table class="historico-table" style="margin-top: 15px;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Descrição</th>
+                        <th>Criticidade</th>
+                        <th>Status</th>
+                        <th>Data Registro</th>
+                        <th>Anexo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="bug : ${sessao.bugs}" style="cursor: pointer;" 
+                        th:onclick="'window.location.href=\'/bugs/detalhes/' + ${bug.id} + '\''">
+                        <td th:text="'#' + ${bug.id}"></td>
+                        <td>
+                            <span th:text="${#strings.abbreviate(bug.descricao, 50)}" 
+                                  th:title="${bug.descricao}"></span>
+                        </td>
+                        <td>
+                            <span th:if="${bug.criticidade != null}" 
+                                  class="status-badge" 
+                                  th:style="'background-color: ' + ${bug.criticidade.cor} + '; color:coffee;'"
+                                  th:text="${bug.criticidade.descricao}"></span>
+                            <span th:if="${bug.criticidade == null}" 
+                                  class="status-badge" 
+                                  style="background-color: #6c757d; color: white;">N/A</span>
+                        </td>
+                        <td>
+                            <span th:if="${bug.resolvido}" class="status-badge" 
+                                  style="background-color: #28a745; color: white;">Resolvido</span>
+                            <span th:if="${!bug.resolvido}" class="status-badge" 
+                                  style="background-color: #dc3545; color: white;">Aberto</span>
+                        </td>
+                        <td th:text="${#temporals.format(bug.dataRegistro, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td>
+                            <span th:if="${bug.caminhoArquivo != null and bug.tipoArquivo.name() == 'IMAGEM'}" style="color: #28a745;">📷 Imagem</span>
+                            <span th:if="${bug.caminhoArquivo != null and bug.tipoArquivo.name() == 'VIDEO'}" style="color: #007bff;">🎥 Vídeo</span>
+                            <span th:if="${bug.caminhoArquivo == null}" style="color: #6c757d;">Não</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div th:if="${sessao.status != null and sessao.status.name() == 'EM_EXECUCAO'}" sec:authorize="hasRole('ROLE_ADMIN')">
+            <a th:href="@{/bugs/cadastro(idSessao=${sessao.id})}" 
+               class="button button-primary" style="margin-top:12px;">
+                <i class="fas fa-plus"></i> Adicionar Bug
+            </a>
+        </div>
+
+        <div th:if="${sessao.tester != null and #authentication.principal.email == sessao.tester.email and sessao.status.name() == 'EM_EXECUCAO'}" sec:authorize="!hasRole('ROLE_ADMIN')">
+            <a th:href="@{/bugs/cadastro(idSessao=${sessao.id})}" 
+               class="button button-primary" style="margin-top: 12px;">
+                <i class="fas fa-plus"></i> Adicionar Bug
+            </a>
+        </div>
+    </div>
+
+    <!-- STATUS -->
+    <div class="card" th:if="${sessao.status != null and sessao.status.name() != 'FINALIZADO'}">
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <h3>Alterar Status</h3>
+            <form th:action="@{/sessoes/atualizarStatus}" method="post" style="display: inline;">
+                <input type="hidden" name="sessaoId" th:value="${sessao.id}" />
+                
+                <div th:if="${sessao.status != null and sessao.status.name() == 'CRIADO'}">
+                    <button type="submit" name="novoStatus" value="EM_EXECUCAO" 
+                            class="button button-primary">Iniciar Execução</button>
+                </div>
+                
+                <div th:if="${sessao.status != null and sessao.status.name() == 'EM_EXECUCAO'}">
+                    <button type="submit" name="novoStatus" value="FINALIZADO" 
+                            class="button button-primary">Finalizar Sessão</button>
+                </div>
+            </form>
+        </div>
+        
+        <div th:if="${sessao.tester != null and #authentication.principal.email == sessao.tester.email}" sec:authorize="!hasRole('ROLE_ADMIN')">
+            <h3>Alterar Status</h3>
+            <form th:action="@{/sessoes/atualizarStatus}" method="post" style="display: inline;">
+                <input type="hidden" name="sessaoId" th:value="${sessao.id}" />
+                
+                <div th:if="${sessao.status != null and sessao.status.name() == 'CRIADO'}">
+                    <button type="submit" name="novoStatus" value="EM_EXECUCAO" 
+                            class="button button-primary">Iniciar Execução</button>
+                </div>
+                
+                <div th:if="${sessao.status != null and sessao.status.name() == 'EM_EXECUCAO'}">
+                    <button type="submit" name="novoStatus" value="FINALIZADO" 
+                            class="button button-primary">Finalizar Sessão</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Navegação -->
+    <div style="margin-top: 20px;">
+        <a th:href="@{/}" class="button button-secondary" style="margin-top: 15px;">Main Menu</a>
+        <a th:href="@{/projetos/{pid}/estrategias/{eid}/sessoes(pid=${sessao.projeto.id}, eid=${sessao.estrategia.id})}" 
+        
+           class="button button-secondary">Voltar para Sessões</a>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

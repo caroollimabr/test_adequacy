@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div th:fragment="navigation-section" class="navigation-section">
+    <a th:href="@{/}" class="button button-secondary" th:text="#{link.main_menu}">Voltar ao Menu Principal</a>
+</div>
+
+<div th:fragment="navigation-section-custom(link, text)" class="navigation-section">
+    <a th:href="${link}" class="button button-secondary" th:text="${text}">Voltar</a>
+</div>
+
+<div th:fragment="navigation-section-multiple" class="navigation-section">
+    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+        <a th:href="@{/}" class="button button-secondary" th:text="#{link.main_menu}">Voltar ao Menu Principal</a>
+    </div>
+</div>
+</body>
+</html>

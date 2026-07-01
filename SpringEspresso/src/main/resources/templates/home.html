@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title th:text="#{titulo.pagina.home}">Home - Spring Espresso</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h2 style="text-align: center;">
+        <span th:text="#{titulo.home}"></span>,
+        <span th:if="${#authentication != null and #authentication.principal != null and #authentication.principal != 'anonymousUser'}" th:text="${#authentication.name}"></span>
+        <span th:if="${#authentication == null or #authentication.principal == null or #authentication.principal == 'anonymousUser'}" th:text="#{titulo.usuario.visitante}"></span>!
+    </h2>
+    <p style="text-align: center; margin-bottom: 30px; color: var(--cafe-medio);" th:text="#{home.subtitulo}"></p>
+
+    <div class="dashboard-grid">
+
+        <!-- Seção Admin - Gerenciar Usuários -->
+        <div class="card" sec:authorize="hasAuthority('ROLE_ADMIN')">
+            <h3>Gerenciar Usuários</h3>
+            <p>Administre contas de usuários, crie novos administradores e usuários do sistema.</p>
+            <a th:href="@{/usuarios}" class="button button-primary">Gerenciar Usuários</a>
+        </div>
+        
+        <!-- Botão para Projetos -->
+        <div class="card">
+            <h3 th:text="#{home.card.projetos.titulo}"></h3>
+            <p th:text="#{home.card.projetos.descricao}"></p>
+            <a th:href="@{/projetos/listar}" class="button button-primary" th:text="#{home.card.projetos.botao}"></a>
+        </div>
+
+        <!-- Botão para Estratégias -->
+        <div class="card">
+            <h3 th:text="#{home.card.estrategias.titulo}"></h3>
+            <p th:text="#{home.card.estrategias.descricao}"></p>
+            <a th:href="@{/estrategias}" class="button button-primary" th:text="#{home.card.estrategias.botao}"></a>
+        </div>
+
+        <!-- Botão para Bugs -->
+        <div class="card">
+            <h3 th:text="#{home.card.bugs.relatorio}"></h3>
+            <p th:text="#{home.card.bugs.descricao}"></p>
+            <a th:href="@{bugs/listar}" class="button button-primary" th:text="#{home.card.bugs.botao}"></a>
+        </div>
+
+
+    </div>
+<!-- 
+    <div style="text-align: center; margin-top: 40px;">
+        <form th:action="@{/logout}" method="post" class="logout">
+            <button type="submit" class="button button-secondary" th:text="#{home.botao.sair}"></button>
+        </form>
+    </div>
+</div>  -->
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

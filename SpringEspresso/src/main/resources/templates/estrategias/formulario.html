@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${estrategia.id == null ? 'Nova Estratégia' : 'Editar Estratégia'}">Formulário de Estratégia</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+  <link rel="stylesheet" th:href="@{/css/form.css}"/>
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+  <h1 th:text="${estrategia.id == null ? 'Nova Estratégia' : 'Editar Estratégia'}">Formulário de Estratégia</h1>
+
+  <div th:if="${erro}" class="message-box error">
+    <p th:text="${erro}"></p>
+  </div>
+
+
+  <form th:action="@{/estrategias/salvar}" th:object="${estrategia}" method="post" id="estrategiaForm" enctype="multipart/form-data">
+    <input type="hidden" th:field="*{id}">
+
+    <!-- Informações Básicas -->
+    <div class="form-section">
+      <h3 th:text="#{estrategia.secao.informacoes}">Informações Básicas</h3>
+      
+      <div class="form-group">
+        <label for="nome" th:text="#{estrategia.label.nome}">Nome da Estratégia</label>
+        <input type="text" id="nome" th:field="*{nome}" 
+               th:placeholder="#{estrategia.placeholder.nome}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="descricao" th:text="#{estrategia.label.descricao}">Descrição</label>
+        <textarea id="descricao" th:field="*{descricao}" 
+                  th:placeholder="#{estrategia.placeholder.descricao}" 
+                  rows="5"></textarea>
+      </div>
+    </div>
+
+    <!-- Exemplos -->
+    <div class="form-section">
+      <h3 th:text="#{estrategia.secao.exemplos}">Exemplos</h3>
+      <div id="exemplosContainer">
+        <div class="item-card exemplo-item" th:each="exemplo, iterStat : ${estrategia.exemplos}">
+          <h4>
+            <span class="item-number exemplo-numero" th:text="${iterStat.count}">1</span>
+            <span th:text="#{estrategia.exemplo.titulo}">Exemplo</span>
+          </h4>
+
+          <input type="hidden" name="exemplosId" th:value="${exemplo.id}">
+          <input type="hidden" name="exemplosUrlImagem" th:value="${exemplo.urlImagem}">
+
+          <div class="form-group">
+            <label th:text="#{estrategia.exemplo.label.texto}">Texto do Exemplo</label>
+            <textarea name="exemplosTexto" th:placeholder="#{estrategia.exemplo.placeholder}" 
+                      th:text="${exemplo.texto}" rows="4"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label th:text="#{estrategia.exemplo.label.imagem}">Imagem do Exemplo (opcional)</label>
+            <input type="file" th:id="${'imagemExemplo_' + iterStat.index}" name="imagensExemplo" 
+                   accept="image/png, image/jpeg, image/gif">
+
+            <div class="imagem-atual-info" th:if="${exemplo.urlImagem != null}">
+              <!-- CORREÇÃO: Adicionado o caminho base /uploads/estrategias/ -->
+              <img th:src="@{'/uploads/estrategias/' + ${exemplo.urlImagem}}" alt="Imagem atual" 
+                   style="max-width: 200px; display: block; margin: 0 auto;">
+              <p><strong th:text="#{estrategia.imagem.atual}">Arquivo atual:</strong> <span th:text="${exemplo.urlImagem}"></span></p>
+            </div>
+          </div>
+
+          <button type="button" class="btn-remover remover-item" th:text="#{estrategia.botao.remover}">Remover</button>
+        </div>
+      </div>
+      
+      <button type="button" id="addExemploBtn" class="add-item-btn" th:text="#{estrategia.botao.adicionar.exemplo}">
+        Adicionar Novo Exemplo
+      </button>
+    </div>
+
+    <!-- Dicas -->
+    <div class="form-section">
+      <h3 th:text="#{estrategia.secao.dicas}">Dicas</h3>
+      <div id="dicasContainer">
+        <div class="item-card dica-item" th:each="dica, iterStat : ${estrategia.dicas}">
+          <h4>
+            <span class="item-number dica-numero" th:text="${iterStat.count}">1</span>
+            <span th:text="#{estrategia.dica.titulo}">Dica</span>
+          </h4>
+          
+          <input type="hidden" name="dicasId" th:value="${dica.id}">
+          
+          <div class="form-group">
+            <label th:text="#{estrategia.dica.label.texto}">Texto da Dica</label>
+            <textarea name="dicasTexto" th:placeholder="#{estrategia.dica.placeholder}" 
+                      th:text="${dica.dica}" rows="3"></textarea>
+          </div>
+
+          <button type="button" class="btn-remover remover-item" th:text="#{estrategia.botao.remover}">Remover</button>
+        </div>
+      </div>
+      
+      <button type="button" id="addDicaBtn" class="add-item-btn" th:text="#{estrategia.botao.adicionar.dica}">
+        Adicionar Nova Dica
+      </button>
+    </div>
+
+    <!-- Ações do Formulário -->
+    <div class="form-actions">
+      <button type="submit" class="button button-primary" th:text="#{estrategia.botao.salvar}">
+        Salvar Estratégia
+      </button>
+    </div>
+  </form>
+  
+  <div th:replace="~{fragments/navigation :: navigation-section-custom('/estrategias', 'Cancelar')}"></div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const exemplosContainer = document.getElementById('exemplosContainer');
+    const addExemploBtn = document.getElementById('addExemploBtn');
+    const dicasContainer = document.getElementById('dicasContainer');
+    const addDicaBtn = document.getElementById('addDicaBtn');
+
+    function renumerarItens(container, itemClass, numeroClass) {
+      const items = container.querySelectorAll('.' + itemClass);
+      items.forEach((item, index) => {
+        const numeroSpan = item.querySelector('.' + numeroClass);
+        if (numeroSpan) numeroSpan.textContent = index + 1;
+      });
+    }
+
+    addExemploBtn.addEventListener('click', function () {
+      const novoIndex = exemplosContainer.querySelectorAll('.exemplo-item').length;
+      const novoExemploHtml = `
+        <div class="item-card exemplo-item">
+          <h4>
+            <span class="item-number exemplo-numero">${novoIndex + 1}</span>
+            <span>Exemplo</span>
+          </h4>
+          <input type="hidden" name="exemplosId" value="">
+          <input type="hidden" name="exemplosUrlImagem" value="">
+          <div class="form-group">
+            <label>Texto do Exemplo</label>
+            <textarea name="exemplosTexto" placeholder="Descreva um exemplo prático de como aplicar esta estratégia..." rows="4"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="imagemExemplo_${novoIndex}">Imagem do Exemplo (opcional)</label>
+            <input type="file" id="imagemExemplo_${novoIndex}" name="imagensExemplo" accept="image/png, image/jpeg, image/gif">
+          </div>
+          <button type="button" class="btn-remover remover-item">Remover</button>
+        </div>`;
+      exemplosContainer.insertAdjacentHTML('beforeend', novoExemploHtml);
+    });
+
+    addDicaBtn.addEventListener('click', function () {
+      const novoIndex = dicasContainer.querySelectorAll('.dica-item').length;
+      const novaDicaHtml = `
+        <div class="item-card dica-item">
+          <h4>
+            <span class="item-number dica-numero">${novoIndex + 1}</span>
+            <span>Dica</span>
+          </h4>
+          <input type="hidden" name="dicasId" value="">
+          <div class="form-group">
+            <label>Texto da Dica</label>
+            <textarea name="dicasTexto" placeholder="Escreva uma dica útil para aplicar esta estratégia..." rows="3"></textarea>
+          </div>
+          <button type="button" class="btn-remover remover-item">Remover</button>
+        </div>`;
+      dicasContainer.insertAdjacentHTML('beforeend', novaDicaHtml);
+    });
+
+    document.addEventListener('click', function (event) {
+      if (event.target && event.target.classList.contains('remover-item')) {
+        const itemParaRemover = event.target.closest('.item-card');
+        if (itemParaRemover) {
+          const parentContainer = itemParaRemover.parentElement;
+          itemParaRemover.remove();
+
+          if (parentContainer.id === 'exemplosContainer') {
+            renumerarItens(parentContainer, 'exemplo-item', 'exemplo-numero');
+          } else if (parentContainer.id === 'dicasContainer') {
+            renumerarItens(parentContainer, 'dica-item', 'dica-numero');
+          }
+        }
+      }
+    });
+
+    const isNewForm = document.querySelector('input[name="id"]').value === '';
+    if (isNewForm) {
+      if (exemplosContainer.children.length === 0) {
+        addExemploBtn.click();
+      }
+      if (dicasContainer.children.length === 0) {
+        addDicaBtn.click();
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

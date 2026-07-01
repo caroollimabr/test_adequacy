@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 10px;
+        }
+
+        .header-left h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .logout button {
+            font-size: 14px;
+            padding: 6px 12px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- fragments/header.html -->
+<header id="site-header" th:fragment="header">
+    <div class="header-left"></div>
+
+    <div class="header-center">
+        <h1>☕ Spring Espresso Game Testing</h1>
+    </div>
+
+    <div class="header-right">
+        <form th:action="@{/logout}" method="post" class="logout">
+            <button type="submit" class="button button-secondary" th:text="#{home.botao.sair}"></button>
+        </form>
+    </div>
+</header>
+
+
+</body>
+</html>

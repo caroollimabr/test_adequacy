@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastrar Bug</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1>Cadastrar Novo Bug</h1>
+    
+    <div th:if="${mensagemSucesso}" class="message-box success">
+        <p th:text="${mensagemSucesso}"></p>
+    </div>
+    <div th:if="${mensagemFalha}" class="message-box error">
+        <p th:text="${mensagemFalha}"></p>
+    </div>
+    
+    <div class="card" style="margin-bottom: 20px;">
+        <h3>Informações da Sessão</h3>
+        <p><strong>Projeto:</strong> <span th:text="${sessao.projeto.nome}"></span></p>
+        <p><strong>Estratégia:</strong> <span th:text="${sessao.estrategia.nome}"></span></p>
+        <p><strong>Descrição da Sessão:</strong> <span th:text="${sessao.descricao}"></span></p>
+    </div>
+    
+    <form th:action="@{/bugs/cadastro}" method="post" enctype="multipart/form-data" class="card">
+        <input type="hidden" name="idSessao" th:value="${sessao.id}"/>
+        
+        <div class="form-group" style="margin-bottom: 15px;">
+            <label for="descricao" style="display: block; margin-bottom: 5px; font-weight: bold;">Descrição do Bug: *</label>
+            <textarea id="descricao" name="descricao" required 
+                      placeholder="Descreva detalhadamente o bug encontrado..."
+                      rows="5" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; resize: vertical;"></textarea>
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 15px;">
+            <label for="criticidade" style="display: block; margin-bottom: 5px; font-weight: bold;">Criticidade:</label>
+            <select id="criticidade" name="criticidade" 
+                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required >
+                <option value=""></option>
+                <option value="BAIXA">Baixa</option>
+                <option value="MEDIA">Média</option>
+                <option value="CRITICA">Crítica</option>
+            </select>
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 15px;">
+            <label for="arquivo" style="display: block; margin-bottom: 5px; font-weight: bold;">Anexar Arquivo (Imagem ou Vídeo):</label>
+            <input type="file" id="arquivo" name="arquivo" 
+                   accept="image/*,video/*"
+                   style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"/>
+            <small style="color: #666; font-size: 0.9em;">Formatos aceitos: JPG, PNG, GIF, MP4, WEBM (máx. 5MB)</small>
+        </div>
+        
+        <div class="form-actions" style="margin-top: 20px;">
+            <button type="submit" class="button button-primary">Cadastrar Bug</button>
+            <a th:href="@{/sessoes/detalhes/{id}(id=${sessao.id})}" 
+               class="button button-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

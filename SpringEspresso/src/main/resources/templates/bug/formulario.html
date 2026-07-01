@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Bug</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1>Registrar Novo Bug</h1>
+    <p style="text-align: center; margin-bottom: 30px; color: #666;">
+        Para a Sessão: <strong th:text="${bug.sessao.descricao}"></strong>
+    </p>
+
+    <div th:if="${mensagemSucesso}" class="message-box success" style="margin-bottom: 20px;">
+        <span th:text="${mensagemSucesso}"></span>
+    </div>
+    <div th:if="${mensagemFalha}" class="message-box error" style="margin-bottom: 20px;">
+        <span th:text="${mensagemFalha}"></span>
+    </div>
+
+    <form th:action="@{/bugs/salvar}" th:object="${bug}" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{sessao.id}" />
+
+        <div style="margin-bottom: 25px;">
+            <label for="descricao" style="display: block; margin-bottom: 8px; font-weight: bold;">
+                Descrição do Bug:
+            </label>
+            <textarea id="descricao" th:field="*{descricao}" 
+                      rows="6" 
+                      style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" 
+                      placeholder="Descreva detalhadamente o comportamento inesperado encontrado durante os testes..." 
+                      required></textarea>
+            <div th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}" class="error-message"></div>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+            <label for="criticidade" style="display: block; margin-bottom: 8px; font-weight: bold;">
+                Nível de Criticidade:
+            </label>
+            <select id="criticidade" th:field="*{criticidade}" 
+                    style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" 
+                    required>
+                <option value="">Selecione o nível de criticidade...</option>
+                <option th:each="crit : ${T(br.ufscar.dc.dsw.projeto.model.CriticidadeBug).values()}" 
+                        th:value="${crit}" 
+                        th:text="${crit.descricao}">
+                </option>
+            </select>
+            <div th:if="${#fields.hasErrors('criticidade')}" th:errors="*{criticidade}" class="error-message"></div>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+            <label for="arquivo" style="display: block; margin-bottom: 8px; font-weight: bold;">
+                Anexar Imagem ou Vídeo (Opcional):
+            </label>
+            <input type="file" id="arquivo" name="arquivo" 
+                   style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                   accept="image/*,video/mp4,video/webm,video/ogg"
+                   onchange="validarArquivo(this)">
+            <small style="color: #666; display: block; margin-top: 5px;">
+                Formatos aceitos: Imagens (JPG, PNG, GIF) ou Vídeos (MP4, WebM) - Máximo 10MB
+            </small>
+        </div>
+
+        <script>
+        function validarArquivo(input) {
+            const arquivo = input.files[0];
+            if (arquivo) {
+                const tamanhoMaximo = 10 * 1024 * 1024; // 10MB
+                if (arquivo.size > tamanhoMaximo) {
+                    alert('Arquivo muito grande. O tamanho máximo é 10MB.');
+                    input.value = '';
+                    return;
+                }
+                
+                const tiposPermitidos = ['image/', 'video/mp4', 'video/webm', 'video/ogg'];
+                const tipoValido = tiposPermitidos.some(tipo => arquivo.type.includes(tipo));
+                
+                if (!tipoValido) {
+                    alert('Tipo de arquivo não suportado. Use imagens ou vídeos nos formatos permitidos.');
+                    input.value = '';
+                }
+            }
+        }
+        </script>
+
+        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+            <button type="submit" class="button button-primary" style="margin-right: 15px;">
+                Registrar Bug
+            </button>
+            <a th:href="@{/sessoes/detalhes/{id}(id=${bug.sessao.id})}" class="button button-secondary">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

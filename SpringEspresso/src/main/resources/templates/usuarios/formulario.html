@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${usuario.id == null ? 'Novo Usuário' : 'Editar Usuário'}">Formulário de Usuário</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/form.css}"/>
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1 th:text="${usuario.id == null ? 'Novo Usuário' : 'Editar Usuário'}">Formulário de Usuário</h1>
+
+    <div th:if="${fail}" class="message-box error">
+        <p th:text="${fail}"></p>
+    </div>
+
+    <form th:action="@{/usuarios/salvar}" th:object="${usuario}" method="post">
+        <input type="hidden" th:field="*{id}">
+
+        <div class="form-section">
+            <h3>Informações do Usuário</h3>
+            
+            <div class="form-group">
+                <label for="nome">Nome Completo *</label>
+                <input type="text" id="nome" th:field="*{nome}" 
+                       placeholder="Digite o nome completo" required maxlength="255">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" th:field="*{email}" 
+                       placeholder="Digite o email" required maxlength="255">
+            </div>
+
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" th:field="*{senha}" 
+                       placeholder="Digite a senha" 
+                       th:required="${usuario.id == null}" minlength="6">
+                <small th:if="${usuario.id != null}" style="color: #666;">
+                    Deixe em branco para manter a senha atual
+                </small>
+                <small th:if="${usuario.id == null}" style="color: #666;">
+                    Mínimo 6 caracteres
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label for="role">Perfil de Acesso *</label>
+                <select id="role" th:field="*{role}" required>
+                    <option value="">Selecione um perfil</option>
+                    <option value="ROLE_ADMIN">Administrador</option>
+                    <option value="ROLE_USER">Usuário</option>
+                </select>
+                <small style="color: #666;">
+                    <strong>Administrador:</strong> Acesso total ao sistema<br>
+                    <strong>Usuário:</strong> Acesso limitado às funcionalidades básicas
+                </small>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="button button-primary">
+                <span th:text="${usuario.id == null ? 'Criar Usuário' : 'Atualizar Usuário'}"></span>
+            </button>
+        </div>
+    </form>
+
+    <div th:replace="~{fragments/navigation :: navigation-section-custom('/usuarios', 'Cancelar')}"></div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

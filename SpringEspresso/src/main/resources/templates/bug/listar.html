@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Bugs</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <style>
+        table.report-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed; 
+        }
+
+        table.report-table th,
+        table.report-table td {
+            padding: 12px 8px;
+            word-wrap: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap; 
+        }
+
+        td.col-bug {
+            white-space: normal;
+        }
+
+        col.col-projeto      { width: 15%; }
+        col.col-bug          { width: 32%; }
+        col.col-criticidade  { width: 12%; }
+        col.col-resolvido    { width: 12%; }
+        col.col-data         { width: 18%; }
+        col.col-actions      { width: 10%; } 
+
+        .bug-id { font-weight: bold; color: var(--cafe-escuro); display: block; }
+        .action-link { display: inline-block; width: 34px; height: 28px; line-height: 26px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1>Relatório de Bugs</h1>
+
+    <div th:if="${mensagemSucesso}" class="message-box success">
+        <p th:text="${mensagemSucesso}"></p>
+    </div>
+    <div th:if="${mensagemFalha}" class="message-box error">
+        <p th:text="${mensagemFalha}"></p>
+    </div>
+
+    <table class="report-table table-striped table-bordered">
+        <colgroup>
+            <col class="col-projeto"/>
+            <col class="col-bug"/>
+            <col class="col-criticidade"/>
+            <col class="col-resolvido"/>
+            <col class="col-data"/>
+            <col class="col-actions"/>
+        </colgroup>
+
+        <thead>
+        <tr>
+            <th>Projeto</th>
+            <th>Bug</th>
+            <th>Criticidade</th>
+            <th>Resolvido?</th>
+            <th>Data</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="b : ${bugs}">
+            <td th:text="${b.sessao.projeto.nome}"></td>
+
+            <td class="col-bug">
+                <span class="bug-id" th:text="${b.descricao}"></span>
+            </td>
+
+            <td th:text="${b.criticidade != null ? b.criticidade.descricao : 'N/A'}"></td>
+
+            <td th:text="${b.resolvido ? '✔️' : '❌'}" style="text-align:center;"></td>
+
+            <td th:text="${#temporals.format(b.dataRegistro, 'dd/MM/yyyy HH:mm')}"></td>
+
+            <td style="text-align:center;">
+                <a th:href="@{'/bugs/detalhes/' + ${b.id}}"
+                   class="button button-secondary small action-link"
+                   title="Ver detalhes">Ver</a>
+            </td>
+        </tr>
+
+        <tr th:if="${#lists.isEmpty(bugs)}">
+            <td colspan="6" style="text-align: center;">Nenhum bug encontrado.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p style="margin-top: 18px;">
+        <a th:href="@{/}" class="button button-secondary">Voltar</a>
+    </p>
+
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

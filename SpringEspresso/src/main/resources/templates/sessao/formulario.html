@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${sessaoEdicaoDTO != null ? 'Edição de Sessão' : 'Nova Sessão de Teste'}"></title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1 th:text="${sessaoEdicaoDTO != null ? 'Editar Sessão de Teste' : 'Nova Sessão para o Projeto: ' + projeto.nome()}"></h1>
+
+    <div th:if="${mensagemFalha}" class="message-box error">
+        <p th:text="${mensagemFalha}"></p>
+    </div>
+
+    <th:block th:if="${sessaoEdicaoDTO != null}">
+        <form th:action="@{/sessoes/editar}" th:object="${sessaoEdicaoDTO}" method="post">
+
+            <input type="hidden" th:field="*{id}" />
+            <input type="hidden" th:field="*{projetoId}" />
+
+            <div class="form-group">
+                <label for="estrategiaId-edit">Estratégia de Teste:</label>
+                <select id="estrategiaId-edit" th:field="*{estrategiaId}" required>
+                    <option value="">-- Selecione uma Estratégia --</option>
+                    <option th:each="est : ${estrategias}"
+                            th:value="${est.id}"
+                            th:text="${est.nome}"></option>
+                </select>
+                <div th:if="${#fields.hasErrors('estrategiaId')}" class="message-box error">
+                    <p th:each="err : ${#fields.errors('estrategiaId')}" th:text="${err}"></p>
+                </div>
+            </div>
+
+            <div class="form-group" sec:authorize="hasRole('ADMIN')">
+                <label for="testerId-edit">Tester Responsável:</label>
+                <select id="testerId-edit" th:field="*{testerId}">
+                    <option value="">-- Nenhum Tester Atribuído --</option>
+                    <option th:each="t : ${testers}" 
+                            th:value="${t.id}" 
+                            th:text="${t.nome + ' (' + t.email + ')'}"></option>
+                </select>
+                <small style="color: #666;">Apenas administradores podem alterar o tester responsável.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="duracao-edit">Duração (em minutos):</label>
+                <input type="number" id="duracao-edit" th:field="*{duracao}" placeholder="Ex: 60" required min="1"/>
+                <div th:if="${#fields.hasErrors('duracao')}" class="message-box error">
+                    <p th:each="err : ${#fields.errors('duracao')}" th:text="${err}"></p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="descricao-edit">Descrição / Objetivos da Sessão:</label>
+                <textarea id="descricao-edit" th:field="*{descricao}" rows="4" placeholder="Descreva o que será focado nesta sessão de teste..." required></textarea>
+                <div th:if="${#fields.hasErrors('descricao')}" class="message-box error">
+                    <p th:each="err : ${#fields.errors('descricao')}" th:text="${err}"></p>
+                </div>
+            </div>
+
+            <button type="submit" class="button button-primary">Atualizar Sessão</button>
+            <a th:href="@{/sessoes/projeto/{id}(id=${sessaoEdicaoDTO.projetoId})}" class="button button-secondary">Cancelar</a>
+        </form>
+    </th:block>
+
+    <th:block th:unless="${sessaoEdicaoDTO != null}">
+        <form th:action="@{/sessoes/criar}" th:object="${sessaoDTO}" method="post">
+            <input type="hidden" th:field="*{projetoId}" />
+
+            <div class="form-group">
+                <label for="estrategia">Estratégia de Teste:</label>
+                <select id="estrategia" th:field="*{estrategia}" required>
+                    <option value="">-- Selecione uma Estratégia --</option>
+                    <option th:each="est : ${estrategias}" th:value="${est.id}" th:text="${est.nome}"></option>
+                </select>
+            </div>
+
+            <!-- ADMIN ESCOLHE TESTER E USER É BLOQUEADO, PODENDO ESCOLHER APENAS A SI MESMO -->
+            <div class="form-group">
+                <label for="tester">Tester Responsável:</label>
+                
+                <!-- ADMIN ESCOLHE QQER TESTER -->
+                <div sec:authorize="hasRole('ADMIN')">
+                    <select id="tester" th:field="*{tester}">
+                        <option value="">-- Nenhum Tester Atribuído --</option>
+                        <option th:each="t : ${testers}" th:value="${t.id}" th:text="${t.nome + ' (' + t.email + ')'}"></option>
+                    </select>
+                    <small style="color: #666;">Como administrador, você pode atribuir qualquer tester ou deixar sem atribuição.</small>
+                </div>
+                
+                <!-- APENAS VISUALIZAÇÃO PARA USERS -->
+                <div sec:authorize="!hasRole('ADMIN')">
+                    <input type="text" 
+                           th:value="${usuarioLogado != null ? usuarioLogado.nome + ' (Você)' : 'Você'}" 
+                           readonly 
+                           style="background-color: #f9f9f9; border: 1px solid #ddd; padding: 8px; border-radius: 4px; width: 100%;">
+                    <small style="color: #666;">Você será automaticamente definido como tester responsável por esta sessão.</small>
+                    <!-- ID USUARIO -->
+                    <input type="hidden" th:field="*{tester}" th:value="${usuarioLogado != null ? usuarioLogado.id : ''}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="duracao">Duração (em minutos):</label>
+                <input type="number" id="duracao" th:field="*{duracao}" placeholder="Ex: 60" required min="1" max="10000"/>
+                <small style="color: #666;">Tempo estimado para a sessão</small>
+            </div>
+
+            <div class="form-group">
+                <label for="descricao">Descrição / Objetivos:</label>
+                <textarea id="descricao" th:field="*{descricao}" rows="6" 
+                          style="width: 100%; min-height: 120px; resize: vertical; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: inherit;"
+                          placeholder="Descreva o que será focado nesta sessão de teste..." required></textarea>
+                <div th:if="${#fields.hasErrors('descricao')}" class="message-box error">
+                    <p th:each="err : ${#fields.errors('descricao')}" th:text="${err}"></p>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button type="submit" class="button button-primary">Criar Sessão</button>
+                <a th:href="@{/sessoes/projeto/{id}(id=${projeto.id()})}" class="button button-secondary">Cancelar</a>
+            </div>
+        </form>
+    </th:block>
+
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
+

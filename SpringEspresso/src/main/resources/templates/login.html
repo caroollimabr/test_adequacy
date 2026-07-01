@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+
+<div class="wrapper">
+    <h2>Login</h2>
+
+    <div th:if="${param.error}" class="message-box error">
+        <p>Email ou senha inválidos.</p>
+    </div>
+    <div th:if="${param.logout}" class="message-box success">
+        <p>Você foi desconectado com sucesso.</p>
+    </div>
+
+    <form th:action="@{/login}" method="post">
+        <div>
+            <label for="username">Email:</label>
+            <input type="text" id="username" name="username" required autofocus/>
+        </div>
+        <div>
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" required/>
+        </div>
+        <div>
+            <button type="submit" class="button button-primary" style="margin-top:12px" id="login-button">Entrar</button>
+        </div>
+    </form>
+    
+    <div style="margin-top: 20px; text-align: center;">
+        <p>ou</p>
+        <a th:href="@{/estrategias}" class="button button-secondary" id="estrategias-convidado-button">
+            Visualizar Estratégias como Convidado
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

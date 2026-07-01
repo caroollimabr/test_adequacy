@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${projetoEdicaoDTO == null} ? 'Cadastro de Projeto' : 'Edição de Projeto'"></title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/estrategia-grid.css}"/>
+    <style>
+        input[type="checkbox"]:disabled + label {
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        input[type="checkbox"]:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .selection-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .selection-table th,
+        .selection-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .selection-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+
+        .selection-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* Adicionar cursor pointer para todas as linhas clicáveis */
+        .selection-table tbody tr {
+            cursor: pointer;
+        }
+
+        .selection-table tbody tr.disabled-row {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Definir larguras específicas das colunas */
+        .selection-table td:first-child,
+        .selection-table th:first-child {
+            width: 60px;
+            text-align: center;
+        }
+
+        .selection-table td:nth-child(2),
+        .selection-table th:nth-child(2) {
+            width: 25%;
+        }
+
+        .selection-table td:nth-child(3),
+        .selection-table th:nth-child(3) {
+            width: auto; /* Ocupa o resto do espaço disponível */
+        }
+
+        .selection-table input[type="checkbox"] {
+            transform: scale(1.2);
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .form-section h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1 th:text="${projetoEdicaoDTO == null} ? 'Cadastro de Projeto' : 'Edição de Projeto'"></h1>
+
+    <div th:if="${fail}" class="message-box error">
+        <p th:text="${fail}"></p>
+    </div>
+
+    <!-- Formulário de Cadastro -->
+    <div th:if="${projetoCadastroDTO != null}">
+        <form th:action="@{/projetos/salvar}" th:object="${projetoCadastroDTO}" method="post">
+
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" th:field="*{nome}" placeholder="Nome do projeto" required/>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 30px;">
+                <label for="descricao">Descrição:</label>
+                <textarea id="descricao" 
+                          th:field="*{descricao}" 
+                          rows="4" 
+                          placeholder="Descrição do projeto"
+                          style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+            </div>
+
+            <div class="form-section">
+                <h3>Estratégias:</h3>
+                <table class="selection-table">
+                    <thead>
+                        <tr>
+                            <th>✓</th>
+                            <th>Nome da Estratégia</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="estrategia : ${estrategias}" onclick="toggleCheckbox(this)">
+                            <td>
+                                <input type="checkbox" 
+                                       th:field="*{estrategiasIds}" 
+                                       th:value="${estrategia.id}" 
+                                       th:id="'estrategia-cad-' + ${estrategia.id}"
+                                       checked
+                                       onclick="event.stopPropagation()"/>
+                            </td>
+                            <td>
+                                <label th:for="'estrategia-cad-' + ${estrategia.id}" 
+                                       th:text="${estrategia.nome}" 
+                                       style="cursor: pointer; font-weight: bold;"></label>
+                            </td>
+                            <td th:text="${estrategia.descricao}" style="color: #666;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-section">
+                <h3>Membros do Projeto:</h3>
+                <table class="selection-table">
+                    <thead>
+                        <tr>
+                            <th>✓</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="usuario : ${usuarios}" onclick="toggleCheckbox(this)">
+                            <td>
+                                <input type="checkbox" 
+                                       name="membrosIds" 
+                                       th:id="'membro_cad_' + ${usuario.id}"
+                                       th:value="${usuario.id}"
+                                       th:checked="${#lists.contains(projetoCadastroDTO.membrosIds, usuario.id)}"
+                                       onclick="event.stopPropagation()">
+                            </td>
+                            <td>
+                                <label th:for="'membro_cad_' + ${usuario.id}" 
+                                       th:text="${usuario.nome}" 
+                                       style="cursor: pointer; font-weight: bold;"></label>
+                            </td>
+                            <td th:text="${usuario.email}" style="color: #666;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button type="submit" class="button button-primary">Salvar</button>
+                <a th:href="@{/projetos/listar}" class="button button-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Formulário de Edição -->
+    <div th:if="${projetoEdicaoDTO != null}">
+        <form th:action="@{/projetos/editar}" th:object="${projetoEdicaoDTO}" method="post">
+
+            <input type="hidden" th:field="*{id}"/>
+
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label for="nome-edit">Nome:</label>
+                <input type="text" id="nome-edit" th:field="*{nome}" required/>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 30px;">
+                <label for="descricao-edit">Descrição:</label>
+                <textarea id="descricao-edit" 
+                          th:field="*{descricao}" 
+                          rows="4" 
+                          style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+            </div>
+
+            <div class="form-section">
+                <h3>Estratégias (não editáveis):</h3>
+                <table class="selection-table">
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Nome da Estratégia</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="estrategia : ${estrategias}" class="disabled-row">
+                            <td>
+                                <input type="checkbox" 
+                                       th:field="*{estrategiasIds}" 
+                                       th:value="${estrategia.id}" 
+                                       th:id="'estrategia-edit-' + ${estrategia.id}"
+                                       th:checked="${#lists.contains(projetoEdicaoDTO.estrategiasIds, estrategia.id)}" 
+                                       disabled/>
+                            </td>
+                            <td>
+                                <label th:for="'estrategia-edit-' + ${estrategia.id}" 
+                                       th:text="${estrategia.nome}" 
+                                       style="font-weight: bold;"
+                                       th:classappend="${#lists.contains(projetoEdicaoDTO.estrategiasIds, estrategia.id)} ? '' : 'text-muted'"></label>
+                            </td>
+                            <td th:text="${estrategia.descricao}" 
+                                style="color: #666;"
+                                th:classappend="${#lists.contains(projetoEdicaoDTO.estrategiasIds, estrategia.id)} ? '' : 'text-muted'"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-section">
+                <h3>Membros do Projeto:</h3>
+                <table class="selection-table">
+                    <thead>
+                        <tr>
+                            <th>✓</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="usuario : ${usuarios}" onclick="toggleCheckbox(this)">
+                            <td>
+                                <input type="checkbox" 
+                                       name="membrosIds" 
+                                       th:id="'membro_edit_' + ${usuario.id}"
+                                       th:value="${usuario.id}"
+                                       th:checked="${#lists.contains(projetoEdicaoDTO.membrosIds, usuario.id)}"
+                                       onclick="event.stopPropagation()">
+                            </td>
+                            <td>
+                                <label th:for="'membro_edit_' + ${usuario.id}" 
+                                       th:text="${usuario.nome}" 
+                                       style="cursor: pointer; font-weight: bold;"></label>
+                            </td>
+                            <td th:text="${usuario.email}" style="color: #666;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button type="submit" class="button button-primary">Atualizar</button>
+                <a th:href="@{/projetos/listar}" class="button button-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script>
+function toggleCheckbox(row) {
+    // Procura o checkbox dentro da linha clicada
+    const checkbox = row.querySelector('input[type="checkbox"]');
+    
+    // Verifica se o checkbox não está desabilitado
+    if (checkbox && !checkbox.disabled) {
+        // Alterna o estado do checkbox
+        checkbox.checked = !checkbox.checked;
+        
+        // Dispara o evento change para caso haja outros listeners
+        const event = new Event('change', { bubbles: true });
+        checkbox.dispatchEvent(event);
+    }
+}
+</script>
+
+</body>
+</html>

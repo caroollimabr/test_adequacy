@@ -1,0 +1,266 @@
+/* src/main/resources/static/css/form.css */
+
+/* Seções do formulário */
+.form-section {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  border: 1px solid #e8e8e8;
+}
+
+.form-section h3 {
+  color: var(--cafe-escuro);
+  border-bottom: 2px solid var(--laranja-suave);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  font-size: 1.4em;
+}
+
+/* Grupos de campos */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: var(--cafe-medio);
+  margin-bottom: 8px;
+  font-size: 0.95em;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1em;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+  border-color: var(--laranja-suave);
+  box-shadow: 0 0 0 3px rgba(255, 218, 185, 0.3);
+  outline: none;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group input[type="file"] {
+  padding: 10px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  background: #fafafa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-group input[type="file"]:hover {
+  border-color: var(--laranja-suave);
+  background: #fff5f0;
+}
+
+/* Cards de itens (exemplos, dicas) */
+.item-card {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 15px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.item-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.item-card h4 {
+  color: var(--cafe-escuro);
+  margin: 0 0 15px 0;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+}
+
+.item-number {
+  background: var(--laranja-suave);
+  color: var(--cafe-escuro);
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9em;
+  margin-right: 10px;
+}
+
+/* Botão de remover */
+.btn-remover {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #dc3545 !important;
+  color: white !important;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85em;
+  transition: all 0.3s ease;
+}
+
+.btn-remover:hover {
+  background: #c82333 !important;
+  transform: scale(1.05);
+}
+
+/* Botão de adicionar item */
+.add-item-btn {
+  background: var(--creme) !important;
+  color: var(--cafe-escuro) !important;
+  border: 2px dashed var(--cafe-medio) !important;
+  padding: 15px 25px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 10px;
+}
+
+
+.add-item-btn:hover {
+  background: var(--laranja-suave) !important;
+  border-color: var(--cafe-escuro) !important;
+  transform: translateY(-2px);
+}
+
+/* Informações da imagem atual */
+.imagem-atual-info {
+  margin-top: 15px;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.imagem-atual-info img {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.imagem-atual-info p {
+  margin: 10px 0 0 0;
+  color: #666;
+  font-size: 0.9em;
+}
+
+/* Ações do formulário */
+.form-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 30px;
+  padding-top: 25px;
+  border-top: 2px solid var(--laranja-suave);
+}
+
+.form-actions .button {
+  padding: 12px 30px;
+  font-size: 1.1em;
+  font-weight: 600;
+  border-radius: 8px;
+  min-width: 150px;
+}
+
+/* Divisor */
+.divider {
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--laranja-suave), transparent);
+  margin: 30px 0;
+  border-radius: 1px;
+}
+
+/* Estado vazio */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  font-style: italic;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .form-section {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .form-actions .button {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-section {
+    padding: 15px;
+  }
+  
+  .item-card {
+    padding: 15px;
+  }
+  
+  .btn-remover {
+    position: static;
+    margin-top: 10px;
+    width: 100%;
+  }
+}
+
+
+/* Optional: Add some specific styles for the multiselect if needed */
+.multiselect-container {
+  margin-bottom: 20px;
+}
+
+.multiselect-container label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold; /* Make label stand out more */
+  color: var(--cafe-escuro); /* Adjust color as per your CSS variables */
+}
+
+.multiselect-container select[multiple] {
+  width: 100%; /* Make it span the full width */
+  padding: 10px;
+  border: 1px solid var(--borda-clara); /* Use your existing border color */
+  border-radius: 5px;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  height: 200px; /* Make it taller to show more options */
+  background-color: var(--branco); /* Consistent background */
+  color: var(--cafe-claro); /* Consistent text color */
+}
+
+.multiselect-instructions {
+  font-size: 0.9em;
+  color: var(--cinza-medio); /* A softer color for instructions */
+  margin-top: 5px;
+  margin-bottom: 15px;
+}

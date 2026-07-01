@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Negado</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+    <main class="error-container">
+        <h2>Acesso Negado!</h2>
+        <p th:if="${fail}" th:text="${fail}">Você não tem permissão para acessar esta página ou recurso.</p>
+        <p>Por favor, verifique suas credenciais ou entre em contato com o administrador.</p>
+        <p><a href="/" class="btn btn-primary">Voltar para Home</a></p>
+        <p><a href="/logout" class="btn btn-secondary">Fazer Logout</a></p>
+    </main>
+</body>
+</html>

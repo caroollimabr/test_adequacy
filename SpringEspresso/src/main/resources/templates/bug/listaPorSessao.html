@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bugs da Sessão de Teste - <span th:text="${sessao.descricao}"></span></title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1 th:text="'Bugs da Sessão: ' + ${sessao.descricao}"></h1>
+    <p style="text-align: center; margin-top: -10px; margin-bottom: 20px;">
+        Projeto: <strong th:text="${sessao.projeto.nome}"></strong>
+    </p>
+
+    <div class="actions-header">
+        <a th:href="@{/sessoes/projeto/{id}(id=${sessao.projeto.id})}" class="button button-secondary">
+            ← Voltar para Sessões
+        </a>
+        <a th:href="@{/bugs/cadastro(idSessao=${sessao.id})}" class="button button-primary">
+            + Registrar Novo Bug
+        </a>
+    </div>
+
+    <!-- Mensagens de Sucesso/Falha -->
+    <div th:if="${success}" class="message-box success" th:text="${success}"></div>
+    <div th:if="${fail}" class="message-box error" th:text="${fail}"></div>
+
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>Descrição do Bug</th>
+            <th>Data de Registro</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="bug : ${listaBugs}">
+            <td th:text="${bug.descricao}">Descrição do bug...</td>
+            <td th:text="${#temporals.format(bug.dataRegistro, 'dd/MM/yyyy HH:mm')}">dd/MM/yyyy HH:mm</td>
+            <td>
+                <span th:class="${bug.resolvido ? 'status-resolved' : 'status-open'}"
+                      th:text="${bug.resolvido ? 'Resolvido' : 'Aberto'}"></span>
+            </td>
+            <td class="actions-cell">
+                <a th:href="@{/bugs/editar/{id}(id=${bug.id})}" class="button button-secondary small">Editar</a>
+                <a th:href="@{/bugs/remover/{id}(id=${bug.id})}" class="button button-danger small"
+                   onclick="return confirm('Tem certeza que deseja remover este bug?');">Remover</a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(listaBugs)}">
+            <td colspan="4" style="text-align: center; padding: 20px;">Nenhum bug encontrado nesta sessão.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erro</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+    <main class="error-container">
+        <h2>Ocorreu um Erro!</h2>
+        <p th:if="${fail}" th:text="${fail}">Ocorreu um erro inesperado na aplicação.</p>
+        <p>Por favor, tente novamente ou entre em contato com o suporte.</p>
+        <p><a href="/" class="btn btn-primary">Voltar para Home</a></p>
+    </main>
+</body>
+</html>

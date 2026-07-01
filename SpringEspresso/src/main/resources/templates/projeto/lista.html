@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title th:text="${titulo}">Lista de Projetos</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <style>
+
+    </style>
+</head>
+<body>
+
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <!-- TÍTULO BASEADO NA ROLE -->
+    <h1 th:text="${titulo}">Projetos</h1>
+    
+    <p th:if="${isAdmin}" style="color: #666; margin-bottom: 20px;">
+        <i>Como administrador, você pode visualizar e gerenciar todos os projetos do sistema.</i>
+    </p>
+    <p th:unless="${isAdmin}" style="color: #666; margin-bottom: 20px;">
+        <i>Exibindo apenas os projetos onde você é membro.</i>
+    </p>
+
+    <!-- NOVO PROJETO, APENAS PARA ADMIN -->
+    <div style="margin-bottom: 20px;">
+        <span sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/projetos/novo}" class="button button-primary">Novo Projeto</a>
+        </span>
+    </div>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <!--<th>ID</th>-->
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Estratégias</th>
+                <th>Membros</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="projeto : ${projetos}">
+                <!--<td th:text="${projeto.id}"></td>-->
+                <td th:text="${projeto.nome}"></td>
+                <td th:text="${projeto.descricao}"></td>
+                <td th:text="${#lists.size(projeto.estrategias)}"></td>
+                
+                
+                <td class="membros-cell">
+                    <span th:if="${projeto.membros != null and !projeto.membros.isEmpty()}">
+                        <div th:each="membro : ${projeto.membros}">
+                            <span th:text="${membro.nome}"></span>
+                        </div>
+                    </span>
+                    <span th:if="${projeto.membros == null or projeto.membros.isEmpty()}" style="color: #999;">
+                        Nenhum membro
+                    </span>
+                </td>
+                
+                <td class="actions">
+                    <a th:href="@{/projetos/detalhes/{id}(id=${projeto.id})}" class="button button-secondary">Ver</a>
+                    <span>
+                        <a th:href="@{/projetos/editar/{id}(id=${projeto.id})}" 
+                           class="button button-secondary">Editar</a>
+                        <a th:href="@{/projetos/remover/{id}(id=${projeto.id})}" 
+                           class="button button-secondary" style="margin-top: 8px"
+                           onclick="return confirm('Tem certeza que deseja remover este projeto?')">Remover</a>
+                    </span>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(projetos)}">
+                <td colspan="5" style="text-align: center; color: #666;">
+                    <span th:if="${isAdmin}">Nenhum projeto cadastrado no sistema.</span>
+                    <span th:unless="${isAdmin}">
+                        Você não está participando de nenhum projeto ainda.
+                        <br><small>Entre em contato com o administrador para ser adicionado a um projeto.</small>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:replace="~{fragments/navigation :: navigation-section-multiple}"></div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

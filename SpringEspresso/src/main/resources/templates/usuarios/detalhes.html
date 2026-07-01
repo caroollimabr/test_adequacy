@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Detalhes do Usuário - ' + ${usuario.nome}">Detalhes do Usuário</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1>Detalhes do Usuário</h1>
+
+    <div style="margin-bottom: 20px;">
+        <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" class="button button-primary">Editar Este Usuário</a>
+        <a th:href="@{/usuarios/remover/{id}(id=${usuario.id})}" 
+           class="button button-secondary"
+           onclick="return confirm('Tem certeza que deseja remover este usuário? Esta ação não pode ser desfeita.')">Remover Usuário</a>
+    </div>
+
+    <div class="card">
+        <h3>Informações do Usuário</h3>
+        <div style="margin-bottom: 15px;">
+            <strong>ID:</strong> <span th:text="${usuario.id}"></span>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <strong>Nome:</strong> <span th:text="${usuario.nome}"></span>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <strong>Email:</strong> <span th:text="${usuario.email}"></span>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <strong>Perfil de Acesso:</strong> 
+            <span th:if="${usuario.role == 'ROLE_ADMIN'}" style="color: #d32f2f; font-weight: bold;">
+                🔐 Administrador
+            </span>
+            <span th:if="${usuario.role == 'ROLE_USER'}" style="color: #1976d2; font-weight: bold;">
+                👤 Usuário
+            </span>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <strong>Permissões:</strong>
+            <div th:if="${usuario.role == 'ROLE_ADMIN'}" style="margin-top: 5px; color: #666;">
+                <div>Gerenciar usuários do sistema</div>
+                <div>Criar, editar e excluir projetos</div>
+                <div>Gerenciar estratégias</div>
+                <div>Acesso completo ao sistema</div>
+            </div>
+            <div th:if="${usuario.role == 'ROLE_USER'}" style="margin-top: 5px; color: #666;">
+                <div>Participar de projetos como membro</div>
+                <div>Visualizar e usar estratégias</div>
+                <div>Registrar sessões de teste</div>
+                <div>Reportar bugs</div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/navigation :: navigation-section-custom('/usuarios', 'Voltar à Lista')}"></div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

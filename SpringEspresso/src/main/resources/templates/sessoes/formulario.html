@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Nova Sessão</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/form.css}"/>
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1>Nova Sessão para <span th:text="${sessao.projeto.nome}"></span> - <span th:text="${sessao.estrategia.nome}"></span></h1>
+
+    <form th:action="@{/sessoes/salvar}" method="post">
+        
+        <input type="hidden" name="projetoId" th:value="${sessao.projeto.id}" />
+        <input type="hidden" name="estrategiaId" th:value="${sessao.estrategia.id}" />
+
+        <div class="form-group" style="margin-bottom: 20px;">
+            <label for="descricao">Descrição:</label>
+            <textarea id="descricao" 
+                      name="descricao" 
+                      rows="6" 
+                      placeholder="Descreva o objetivo e escopo desta sessão de teste..."
+                      style="width: 100%; min-height: 120px; resize: vertical; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: inherit;"
+                      required></textarea>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+            <label for="duracaoMinutos">Duração (em minutos):</label>
+            <input type="number" 
+                   id="duracaoMinutos" 
+                   name="duracaoMinutos" 
+                   min="1" 
+                   max="10000" 
+                   placeholder="Ex: 60"
+                   style="width: 200px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                   required />
+            <small style="color: #666; display: block; margin-top: 5px;">
+                Tempo estimado para a sessão
+            </small>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 30px;">
+            <label for="testerId">Tester Responsável:</label>
+            
+            <div th:if="${isAdmin}">
+                <select id="testerId" 
+                        name="testerId"
+                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <option value="">-- Nenhum tester selecionado --</option>
+                    <option th:each="usuario : ${usuarios}" 
+                            th:value="${usuario.id}" 
+                            th:text="${usuario.nome + ' (' + usuario.email + ')'}"></option>
+                </select>
+                <small style="color: #666; display: block; margin-top: 5px;">
+                    Como administrador, você pode atribuir qualquer membro ou deixar sem tester
+                </small>
+            </div>
+            
+            <div th:unless="${isAdmin}">
+                <input type="text" 
+                       th:value="${usuarioLogado != null ? usuarioLogado.nome + ' (Você)' : 'Você'}" 
+                       readonly 
+                       style="background-color: #f9f9f9; border: 1px solid #ddd; padding: 8px; border-radius: 4px; width: 100%;">
+                
+                <input type="hidden" 
+                       id="testerId"
+                       name="testerId"
+                       th:value="${usuarioLogado.id}" />
+
+                <small style="color: #666; display: block; margin-top: 5px;">
+                    Você será automaticamente definido como tester responsável por esta sessão
+                </small>
+            </div>
+            
+            <div th:if="${usuarios == null or usuarios.isEmpty()}" 
+                 style="padding: 15px; background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px; color: #856404;">
+                <strong>⚠️ Atenção:</strong> Este projeto não possui membros cadastrados.
+                <br>
+                <small>A sessão será criada sem tester responsável. Você pode atribuir um tester posteriormente editando o projeto para adicionar membros.</small>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+            <button type="submit" class="button button-primary">Criar Sessão</button>
+            <a th:href="@{/projetos/{pid}/estrategias/{eid}/sessoes(pid=${sessao.projeto.id}, eid=${sessao.estrategia.id})}" 
+               class="button button-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

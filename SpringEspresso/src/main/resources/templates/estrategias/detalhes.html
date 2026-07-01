@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+      lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="'Detalhes da Estratégia - ' + ${estrategia.nome}">Detalhes da Estratégia</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+  <h1 th:text="#{titulo.detalhes.estrategia}">Detalhes da Estratégia</h1>
+
+  <div th:if="${erro}" class="message-box error">
+    <p th:text="${erro}"></p>
+  </div>
+
+  <div style="margin-bottom: 20px;">
+    <span th:if="${estrategia != null}">
+      <a th:href="@{/estrategias/editar/{id}(id=${estrategia.id})}" 
+         class="button button-primary" 
+         th:text="#{link.editar_estrategia}"
+         sec:authorize="hasRole('ROLE_ADMIN')">Editar Esta Estratégia</a>
+       <!--Remover estratégia-->
+      <a th:href="@{/estrategias/remover/{id}(id=${estrategia.id})}" 
+         class="button button-secondary" 
+         th:text="#{link.remover_estrategia}"
+         sec:authorize="hasRole('ROLE_ADMIN')"
+         onclick="return confirm('Tem certeza que deseja remover esta estratégia? Esta ação não pode ser desfeita.');">Remover Esta Estratégia</a>    
+
+    </span>
+  </div>
+
+  <div th:if="${estrategia != null}">
+    <div class="card" style="margin-bottom: 20px;">
+      <h3 th:text="#{estrategia.secao.informacoes}">Informações Básicas</h3>
+      <div style="margin-bottom: 10px;">
+        <strong th:text="#{tabela.coluna.id}">ID:</strong> <span th:text="${estrategia.id}"></span>
+      </div>
+      <div style="margin-bottom: 10px;">
+        <strong th:text="#{tabela.coluna.nome}">Nome:</strong> <span th:text="${estrategia.nome}"></span>
+      </div>
+      <div style="margin-bottom: 10px;">
+        <strong th:text="#{tabela.coluna.descricao}">Descrição:</strong>
+        <div style="white-space: pre-wrap; margin-top: 5px; padding: 10px; background-color: #f9f9f9; border-radius: 5px;" th:text="${estrategia.descricao}"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 20px;">
+      <h3 th:text="#{estrategia.secao.exemplos}">Exemplos</h3>
+      <div th:if="${not #lists.isEmpty(estrategia.exemplos)}">
+        <div th:each="exemplo, iterStat : ${estrategia.exemplos}" style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+          <h4 th:text="#{estrategia.exemplo.titulo} + ' ' + ${iterStat.count}">Exemplo 1</h4>
+          <div style="white-space: pre-wrap; margin-bottom: 10px;" th:text="${exemplo.texto}"></div>
+          <div th:if="${exemplo.urlImagem != null and not #strings.isEmpty(exemplo.urlImagem)}">
+            <strong th:text="#{estrategia.exemplo.label.imagem}">Imagem:</strong>
+            <div style="margin-top: 10px;">
+
+              <a th:href="@{'/uploads/estrategias/' + ${exemplo.urlImagem}}" target="_blank" th:title="'Ver imagem: ' + ${exemplo.urlImagem}">
+                <img th:src="@{'/uploads/estrategias/' + ${exemplo.urlImagem}}" th:alt="'Imagem do exemplo: ' + ${exemplo.texto}" style="max-width: 300px; border-radius: 5px;">
+              </a>
+            </div>
+          </div>
+          <input type="hidden" name="exemplosUrlImagem" th:value="${exemplo.urlImagem}">
+        </div>
+      </div>
+      <div th:unless="${not #lists.isEmpty(estrategia.exemplos)}">
+        <p style="color: #666; font-style: italic;" th:text="#{mensagem.sem.dados}">Nenhum exemplo cadastrado para esta estratégia.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 th:text="#{estrategia.secao.dicas}">Dicas</h3>
+      <div th:if="${not #lists.isEmpty(estrategia.dicas)}">
+        <div th:each="dica, iterStat : ${estrategia.dicas}" style="margin-bottom: 15px; padding: 10px; background-color: #f9f9f9; border-radius: 5px;">
+          <strong th:text="#{estrategia.dica.titulo} + ' ' + ${iterStat.count}">Dica 1:</strong>
+          <div style="white-space: pre-wrap; margin-top: 5px;" th:text="${dica.texto}"></div>
+        </div>
+      </div>
+      <div th:unless="${not #lists.isEmpty(estrategia.dicas)}">
+        <p style="color: #666; font-style: italic;" th:text="#{mensagem.sem.dados}">Nenhuma dica cadastrada para esta estratégia.</p>
+      </div>
+    </div>
+  <a th:href="@{/}" class="button button-secondary" style="margin-top: 15px;">Main Menu</a>
+  <a th:href="@{/estrategias}" class="button button-secondary" style="margin-top: 15px;">Voltar para a Lista</a>
+  
+  </div>
+
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

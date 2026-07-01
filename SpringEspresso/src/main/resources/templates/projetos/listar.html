@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+      lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title th:text="${titulo != null} ? ${titulo} : 'Lista de Projetos'">Lista de Projetos</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    
+    <!-- Estilos para as medalhas -->
+    <style>
+        .medalhas-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .medalha-item {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(0,0,0,0.05);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            min-width: fit-content;
+        }
+        
+        .medalha-item.ouro {
+            background: rgba(255, 215, 0, 0.15);
+            color: #B8860B;
+            border: 1px solid rgba(24, 21, 4, 0.3);
+        }
+        
+        .medalha-item.prata {
+            background: rgba(192, 192, 192, 0.15);
+            color: #696969;
+            border: 1px solid rgba(192, 192, 192, 0.3);
+        }
+        
+        .medalha-item.bronze {
+            background: rgba(205, 133, 63, 0.15);
+            color: #c46d2f;
+            border: 1px solid rgba(228, 170, 112, 0.3);
+        }
+        
+        .sem-medalhas {
+            color: #999;
+            font-style: italic;
+            font-size: 13px;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .medalhas-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            
+            .medalha-item {
+                font-size: 12px;
+                padding: 3px 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    
+    <h1 th:text="${titulo != null} ? ${titulo} : 'Projetos'">Projetos</h1>
+    
+    
+    <div th:if="${success}" class="message-box success">
+        <p th:text="${success}"></p>
+    </div>
+    <div th:if="${fail}" class="message-box error">
+        <p th:text="${fail}"></p>
+    </div>
+    
+    
+    <p th:if="${isAdmin != null and isAdmin}" style="color: #666; margin-bottom: 20px;">
+        <i>Como administrador, você pode visualizar e gerenciar todos os projetos do sistema.</i>
+    </p>
+    <p th:if="${isAdmin != null and !isAdmin}" style="color: #666; margin-bottom: 20px;">
+        <i>Exibindo apenas os projetos onde você é membro.</i>
+    </p>
+
+    
+    <div style="margin-bottom: 20px;" sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/projetos/novo}" class="button button-primary">Novo Projeto</a>
+    </div>
+
+    <div th:if="${projetos != null and not #lists.isEmpty(projetos)}">
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>Medalhas por Estratégias</th>
+                        <th>Membros</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="projeto : ${projetos}">
+                        <td th:text="${projeto.nome}"></td>
+                        <td th:text="${projeto.descricao}"></td>
+                        
+                        <!-- MEDALHAS -->
+                        <td>
+                            <div th:with="medalhas=${medalhasPorProjeto.get(projeto.id)}">
+                                <div th:if="${medalhas != null and (medalhas.get('ouro') > 0 or medalhas.get('prata') > 0 or medalhas.get('bronze') > 0)}" 
+                                     class="medalhas-container">
+                                     
+                                    <span th:if="${medalhas.get('ouro') > 0}" 
+                                          class="medalha-item ouro" 
+                                          th:title="|${medalhas.get('ouro')} estratégia(s) com 10+ sessões finalizadas|">
+                                        <span th:text="${medalhas.get('ouro')}">0</span>x🥇
+                                    </span>
+                                    
+                                    <span th:if="${medalhas.get('prata') > 0}" 
+                                          class="medalha-item prata"
+                                          th:title="|${medalhas.get('prata')} estratégia(s) com 5-9 sessões finalizadas|">
+                                        <span th:text="${medalhas.get('prata')}">0</span>x🥈
+                                    </span>
+                                    
+                                    <span th:if="${medalhas.get('bronze') > 0}" 
+                                          class="medalha-item bronze"
+                                          th:title="|${medalhas.get('bronze')} estratégia(s) com 1-4 sessões finalizadas|">
+                                        <span th:text="${medalhas.get('bronze')}">0</span>x🥉
+                                    </span>
+                                </div>
+                                
+                                <div th:if="${medalhas == null or (medalhas.get('ouro') == 0 and medalhas.get('prata') == 0 and medalhas.get('bronze') == 0)}" 
+                                     class="sem-medalhas">
+                                    Nenhuma sessão finalizada
+                                </div>
+                            </div>
+                        </td>
+                        
+                        <!-- MEMBROS -->
+                        <td class="membros-cell">
+                            <span th:if="${projeto.membros != null and !projeto.membros.isEmpty()}">
+                                <div th:each="membro : ${projeto.membros}">
+                                    <span th:text="${membro.nome}"></span>
+                                </div>
+                            </span>
+                            <span th:if="${projeto.membros == null or projeto.membros.isEmpty()}" style="color: #999;">
+                                Nenhum membro
+                            </span>
+                        </td>
+                        
+                        <td class="actions">
+                            <a th:href="@{/projetos/detalhes/{id}(id=${projeto.id})}" class="button button-secondary">Ver Detalhes</a>
+                            <span sec:authorize="hasRole('ADMIN')">
+                                <a th:href="@{/projetos/editar/{id}(id=${projeto.id})}" 
+                                   class="button button-secondary">Editar</a>
+                                <a th:href="@{/projetos/remover/{id}(id=${projeto.id})}" 
+                                   class="button button-secondary" style="margin-top: 8px"
+                                   onclick="return confirm('Tem certeza que deseja remover este projeto?')">Remover</a>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div th:unless="${projetos != null and not #lists.isEmpty(projetos)}">
+        <div style="text-align: center; padding: 40px 20px; color: #666; font-style: italic;">
+            <p th:if="${isAdmin != null and isAdmin}">Nenhum projeto cadastrado no sistema.</p>
+            <p th:if="${isAdmin != null and !isAdmin}">
+                Você não está participando de nenhum projeto ainda.
+                <br><small>Entre em contato com o administrador para ser adicionado a um projeto.</small>
+            </p>
+            <p th:if="${isAdmin == null}">Nenhum projeto encontrado.</p>
+            <p sec:authorize="hasRole('ADMIN')" style="margin-top: 20px;">Clique em "Novo Projeto" para adicionar.</p>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/navigation :: navigation-section}"></div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

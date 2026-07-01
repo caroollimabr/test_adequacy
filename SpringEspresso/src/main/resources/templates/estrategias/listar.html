@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="#{titulo.pagina.estrategias}">Gerenciador de Estratégias</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+  <link rel="stylesheet" th:href="@{/css/estrategia-grid.css}"/>
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+  <h1 th:text="#{titulo.lista.estrategias}">Lista de Estratégias</h1>
+
+  <div th:if="${success}" class="message-box success">
+    <p th:text="${success}"></p>
+  </div>
+  <div th:if="${fail}" class="message-box error">
+    <p th:text="${fail}"></p>
+  </div>
+
+  <div style="margin-bottom: 20px;" sec:authorize="hasRole('ADMIN')">
+    <a th:href="@{/estrategias/novo}" class="button button-primary" th:text="#{link.nova_estrategia}">Nova Estratégia</a>
+  </div>
+
+  <div th:if="${estrategias != null and not #lists.isEmpty(estrategias)}">
+    <div class="strategy-grid">
+      <div th:each="estrategia : ${estrategias}" class="strategy-button">
+        <a th:href="@{/estrategias/detalhes/{id}(id=${estrategia.id})}" 
+           class="strategy-button-link" 
+           th:text="${estrategia.nome}">Estratégia</a>
+      </div>
+    </div>
+  </div>
+
+  <div th:unless="${estrategias != null and not #lists.isEmpty(estrategias)}">
+    <div style="text-align: center; padding: 40px 20px; color: #666; font-style: italic;">
+      <p th:text="#{estrategia.nenhuma}">Nenhuma estratégia encontrada.</p>
+      <p sec:authorize="hasRole('ADMIN')" style="margin-top: 20px;" th:text="#{estrategia.clique_novo}">Clique em "Nova Estratégia" para adicionar.</p>
+    </div>
+  </div>
+
+  <div th:replace="~{fragments/navigation :: navigation-section}"></div>
+</div>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
