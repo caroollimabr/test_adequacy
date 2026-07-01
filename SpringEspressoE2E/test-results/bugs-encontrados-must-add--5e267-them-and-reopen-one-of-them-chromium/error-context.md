@@ -1,0 +1,176 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e3]:
+    - heading "☕ Spring Espresso Game Testing" [level=1] [ref=e5]
+    - button "Sair" [ref=e8] [cursor=pointer]
+  - generic [ref=e9]:
+    - heading "Relatório de Bugs" [level=1] [ref=e10]
+    - table [ref=e11]:
+      - rowgroup [ref=e19]:
+        - row "Projeto Bug Criticidade Resolvido? Data Ações" [ref=e20]:
+          - columnheader "Projeto" [ref=e21]
+          - columnheader "Bug" [ref=e22]
+          - columnheader "Criticidade" [ref=e23]
+          - columnheader "Resolvido?" [ref=e24]
+          - columnheader "Data" [ref=e25]
+          - columnheader "Ações" [ref=e26]
+      - rowgroup [ref=e27]:
+        - row "Projeto Alpha BugBugTeste1 Média ❌ 09/06/2026 09:51 Ver" [ref=e28]:
+          - cell "Projeto Alpha" [ref=e29]
+          - cell "BugBugTeste1" [ref=e30]:
+            - generic [ref=e31]: BugBugTeste1
+          - cell "Média" [ref=e32]
+          - cell "❌" [ref=e33]
+          - cell "09/06/2026 09:51" [ref=e34]
+          - cell "Ver" [ref=e35]:
+            - link "Ver" [ref=e36] [cursor=pointer]:
+              - /url: /bugs/detalhes/2
+        - row "Projeto Alpha BugTesteUser1 Crítica ❌ 09/06/2026 09:51 Ver" [ref=e37]:
+          - cell "Projeto Alpha" [ref=e38]
+          - cell "BugTesteUser1" [ref=e39]:
+            - generic [ref=e40]: BugTesteUser1
+          - cell "Crítica" [ref=e41]
+          - cell "❌" [ref=e42]
+          - cell "09/06/2026 09:51" [ref=e43]
+          - cell "Ver" [ref=e44]:
+            - link "Ver" [ref=e45] [cursor=pointer]:
+              - /url: /bugs/detalhes/1
+        - row "Projeto Alpha BugBugTeste3 Média ❌ 09/06/2026 09:51 Ver" [ref=e46]:
+          - cell "Projeto Alpha" [ref=e47]
+          - cell "BugBugTeste3" [ref=e48]:
+            - generic [ref=e49]: BugBugTeste3
+          - cell "Média" [ref=e50]
+          - cell "❌" [ref=e51]
+          - cell "09/06/2026 09:51" [ref=e52]
+          - cell "Ver" [ref=e53]:
+            - link "Ver" [ref=e54] [cursor=pointer]:
+              - /url: /bugs/detalhes/3
+        - row "Projeto Alpha BugTesteUser1 Crítica ❌ 09/06/2026 10:11 Ver" [ref=e55]:
+          - cell "Projeto Alpha" [ref=e56]
+          - cell "BugTesteUser1" [ref=e57]:
+            - generic [ref=e58]: BugTesteUser1
+          - cell "Crítica" [ref=e59]
+          - cell "❌" [ref=e60]
+          - cell "09/06/2026 10:11" [ref=e61]
+          - cell "Ver" [ref=e62]:
+            - link "Ver" [ref=e63] [cursor=pointer]:
+              - /url: /bugs/detalhes/5
+        - row "Projeto Alpha BugBugTeste1 Média ❌ 09/06/2026 10:11 Ver" [ref=e64]:
+          - cell "Projeto Alpha" [ref=e65]
+          - cell "BugBugTeste1" [ref=e66]:
+            - generic [ref=e67]: BugBugTeste1
+          - cell "Média" [ref=e68]
+          - cell "❌" [ref=e69]
+          - cell "09/06/2026 10:11" [ref=e70]
+          - cell "Ver" [ref=e71]:
+            - link "Ver" [ref=e72] [cursor=pointer]:
+              - /url: /bugs/detalhes/4
+        - row "Projeto Alpha BugBugTeste3 Média ✔️ 09/06/2026 10:12 Ver" [ref=e73]:
+          - cell "Projeto Alpha" [ref=e74]
+          - cell "BugBugTeste3" [ref=e75]:
+            - generic [ref=e76]: BugBugTeste3
+          - cell "Média" [ref=e77]
+          - cell "✔️" [ref=e78]
+          - cell "09/06/2026 10:12" [ref=e79]
+          - cell "Ver" [ref=e80]:
+            - link "Ver" [ref=e81] [cursor=pointer]:
+              - /url: /bugs/detalhes/6
+        - row "Projeto Alpha BugBugTeste4 Baixa ❌ 09/06/2026 10:12 Ver" [ref=e82]:
+          - cell "Projeto Alpha" [ref=e83]
+          - cell "BugBugTeste4" [ref=e84]:
+            - generic [ref=e85]: BugBugTeste4
+          - cell "Baixa" [ref=e86]
+          - cell "❌" [ref=e87]
+          - cell "09/06/2026 10:12" [ref=e88]
+          - cell "Ver" [ref=e89]:
+            - link "Ver" [ref=e90] [cursor=pointer]:
+              - /url: /bugs/detalhes/7
+        - row "Projeto Alpha BugTesteUser1 Crítica ❌ 09/06/2026 15:54 Ver" [ref=e91]:
+          - cell "Projeto Alpha" [ref=e92]
+          - cell "BugTesteUser1" [ref=e93]:
+            - generic [ref=e94]: BugTesteUser1
+          - cell "Crítica" [ref=e95]
+          - cell "❌" [ref=e96]
+          - cell "09/06/2026 15:54" [ref=e97]
+          - cell "Ver" [ref=e98]:
+            - link "Ver" [ref=e99] [cursor=pointer]:
+              - /url: /bugs/detalhes/8
+        - row "Projeto Alpha BugBugTeste1 Média ❌ 09/06/2026 15:54 Ver" [ref=e100]:
+          - cell "Projeto Alpha" [ref=e101]
+          - cell "BugBugTeste1" [ref=e102]:
+            - generic [ref=e103]: BugBugTeste1
+          - cell "Média" [ref=e104]
+          - cell "❌" [ref=e105]
+          - cell "09/06/2026 15:54" [ref=e106]
+          - cell "Ver" [ref=e107]:
+            - link "Ver" [ref=e108] [cursor=pointer]:
+              - /url: /bugs/detalhes/9
+        - row "Projeto Alpha BugBugTeste3 Média ✔️ 09/06/2026 15:55 Ver" [ref=e109]:
+          - cell "Projeto Alpha" [ref=e110]
+          - cell "BugBugTeste3" [ref=e111]:
+            - generic [ref=e112]: BugBugTeste3
+          - cell "Média" [ref=e113]
+          - cell "✔️" [ref=e114]
+          - cell "09/06/2026 15:55" [ref=e115]
+          - cell "Ver" [ref=e116]:
+            - link "Ver" [ref=e117] [cursor=pointer]:
+              - /url: /bugs/detalhes/10
+        - row "Projeto Alpha BugBugTeste4 Baixa ❌ 09/06/2026 15:55 Ver" [ref=e118]:
+          - cell "Projeto Alpha" [ref=e119]
+          - cell "BugBugTeste4" [ref=e120]:
+            - generic [ref=e121]: BugBugTeste4
+          - cell "Baixa" [ref=e122]
+          - cell "❌" [ref=e123]
+          - cell "09/06/2026 15:55" [ref=e124]
+          - cell "Ver" [ref=e125]:
+            - link "Ver" [ref=e126] [cursor=pointer]:
+              - /url: /bugs/detalhes/11
+        - row "Projeto Alpha BugTesteUser1 Crítica ❌ 09/06/2026 15:56 Ver" [ref=e127]:
+          - cell "Projeto Alpha" [ref=e128]
+          - cell "BugTesteUser1" [ref=e129]:
+            - generic [ref=e130]: BugTesteUser1
+          - cell "Crítica" [ref=e131]
+          - cell "❌" [ref=e132]
+          - cell "09/06/2026 15:56" [ref=e133]
+          - cell "Ver" [ref=e134]:
+            - link "Ver" [ref=e135] [cursor=pointer]:
+              - /url: /bugs/detalhes/13
+        - row "Projeto Alpha BugBugTeste1 Média ❌ 09/06/2026 15:56 Ver" [ref=e136]:
+          - cell "Projeto Alpha" [ref=e137]
+          - cell "BugBugTeste1" [ref=e138]:
+            - generic [ref=e139]: BugBugTeste1
+          - cell "Média" [ref=e140]
+          - cell "❌" [ref=e141]
+          - cell "09/06/2026 15:56" [ref=e142]
+          - cell "Ver" [ref=e143]:
+            - link "Ver" [ref=e144] [cursor=pointer]:
+              - /url: /bugs/detalhes/12
+        - row "Projeto Alpha BugBugTeste3 Média ✔️ 09/06/2026 15:56 Ver" [ref=e145]:
+          - cell "Projeto Alpha" [ref=e146]
+          - cell "BugBugTeste3" [ref=e147]:
+            - generic [ref=e148]: BugBugTeste3
+          - cell "Média" [ref=e149]
+          - cell "✔️" [ref=e150]
+          - cell "09/06/2026 15:56" [ref=e151]
+          - cell "Ver" [ref=e152]:
+            - link "Ver" [ref=e153] [cursor=pointer]:
+              - /url: /bugs/detalhes/14
+        - row "Projeto Alpha BugBugTeste4 Baixa ❌ 09/06/2026 15:56 Ver" [ref=e154]:
+          - cell "Projeto Alpha" [ref=e155]
+          - cell "BugBugTeste4" [ref=e156]:
+            - generic [ref=e157]: BugBugTeste4
+          - cell "Baixa" [ref=e158]
+          - cell "❌" [ref=e159]
+          - cell "09/06/2026 15:56" [ref=e160]
+          - cell "Ver" [ref=e161]:
+            - link "Ver" [ref=e162] [cursor=pointer]:
+              - /url: /bugs/detalhes/15
+    - paragraph [ref=e163]:
+      - link "Voltar" [ref=e164] [cursor=pointer]:
+        - /url: /
+  - contentinfo [ref=e165]:
+    - paragraph [ref=e166]: Spring Espresso Game Testing. Um Software Open-source para a disciplina de Desenvolvimento Web.
+    - paragraph [ref=e167]: Desenvolvido com café e paixão!
+```

@@ -1,0 +1,1033 @@
+openapi: "3.0.1"
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+paths:
+  /usuarios/salvar:
+    post:
+      tags:
+        - usuario-controller
+      summary: Página de salvar usuario
+      operationId: salvarUsuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioModel'
+      responses:
+        '200':
+          description: Retorna a view /usuarios/novo ou /usuarios/editar/{id}
+          content:
+            text/html:
+              schema:
+                type: string
+  /sessoes/salvar:
+    post:
+      tags:
+        - sessao-controller
+      summary: Página de salvar sessao
+      operationId: salvarSessao
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                projetoId:
+                  type: integer
+                  format: int64
+                estrategiaId:
+                  type: integer
+                  format: int64
+                descricao:
+                  type: string
+                testerId:
+                  type: integer
+                  format: int64
+                duracaoMinutos:
+                  type: integer
+                  format: int64
+              required:
+                - projetoId
+                - estrategiaId
+                - descricao
+                - testerId
+                - duracaoMinutos
+      responses:
+        '200':
+          description: Retorna a view /projetos/{id}/estrategias/{id}/sessoes
+          content:
+            text/html:
+              schema:
+                type: string
+  /sessoes/excluir/{id}:
+    post:
+      tags:
+        - sessao-controller
+      summary: Página de exclusao de sessao
+      operationId: excluir
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Redireciona para /projetos/{id}/estrategias/{id}/sessoes
+          content:
+            text/html:
+              schema:
+                type: string
+  /sessoes/atualizarStatus:
+    post:
+      tags:
+        - sessao-controller
+      summary: Página de atualizacao do status da sessao
+      operationId: atualizarStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sessaoId:
+                  type: integer
+                  format: int64
+                novoStatus:
+                  type: string
+              required:
+                - sessaoId
+                - novoStatus
+      responses:
+        '200':
+          description: Retorna a view /sessoes/detalhes/{id}
+          content:
+            text/html:
+              schema:
+                type: string
+  /projetos/salvar:
+    post:
+      tags:
+        - projeto-controller
+      summary: Página de salvar projeto para usuarios admin
+      operationId: salvar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjetoCadastroDTO'
+      responses:
+        '200':
+          description: Retorna a view /projetos/listar
+          content:
+            text/html:
+              schema:
+                type: string
+  /projetos/editar:
+    post:
+      tags:
+        - projeto-controller
+      summary: Página de atualizacao de edicao de projeto para usuario admin
+      operationId: editar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjetoEdicaoDTO'
+      responses:
+        '200':
+          description: Retorna a view login /projetos/listar
+          content:
+            text/html:
+              schema:
+                type: string
+  /estrategias/salvar:
+    post:
+      tags:
+        - estrategia-controller
+      summary: Salva nova estrategia
+      operationId: salvar_1
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                nome:
+                  type: string
+                descricao:
+                  type: string
+                dicasId:
+                  type: array
+                  items:
+                    type: integer
+                    format: int64
+                dicasTexto:
+                  type: array
+                  items:
+                    type: string
+                exemplosId:
+                  type: array
+                  items:
+                    type: integer
+                    format: int64
+                exemplosTexto:
+                  type: array
+                  items:
+                    type: string
+                exemplosUrlImagem:
+                  type: array
+                  items:
+                    type: string
+                imagensExemplo:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+              required:
+                - nome
+                - descricao
+                - imagensExemplo
+      responses:
+        '400':
+          description: Erro de validação
+          content:
+            text/html:
+              schema:
+                type: string
+        '302':
+          description: 'Sucesso: Redireciona para /estrategias'
+          content:
+            text/html:
+              schema:
+                type: string
+  /bugs/resolver:
+    post:
+      tags:
+        - bug-controller
+      summary: Salva o bug como resolvido
+      operationId: resolverBug
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bugId:
+                  type: integer
+                  format: int64
+              required:
+                - bugId
+      responses:
+        '302':
+          description: 'Sucesso: Redireciona para /bugs/detalhes/{id}'
+          content:
+            text/html:
+              schema:
+                type: string
+        '400':
+          description: Erro de validação
+          content:
+            text/html:
+              schema:
+                type: string
+  /bugs/reabrir:
+    post:
+      tags:
+        - bug-controller
+      summary: Reabre um bug já resolvido
+      operationId: reabrirBug
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bugId:
+                  type: integer
+                  format: int64
+              required:
+                - bugId
+      responses:
+        '302':
+          description: 'Sucesso: Redireciona para /bugs/detalhes/{id}'
+          content:
+            text/html:
+              schema:
+                type: string
+        '400':
+          description: Erro de validação
+          content:
+            text/html:
+              schema:
+                type: string
+  /bugs/cadastro:
+    get:
+      tags:
+        - bug-controller
+      summary: Página de bugs cadastrados
+      operationId: formularioCadastro
+      parameters:
+        - name: idSessao
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Retorna a view bug/cadastro
+          content:
+            text/html:
+              schema:
+                type: string
+    post:
+      tags:
+        - bug-controller
+      summary: Salva o bug
+      operationId: salvarBug
+      parameters:
+        - name: idSessao
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                bug:
+                  $ref: '#/components/schemas/BugModel'
+                arquivo:
+                  type: string
+                  format: binary
+              required:
+                - bug
+      responses:
+        '302':
+          description: 'Sucesso: Redireciona para /bugs/cadastro?idSessao={id}'
+          content:
+            text/html:
+              schema:
+                type: string
+        '400':
+          description: Erro de validação
+          content:
+            text/html:
+              schema:
+                type: string
+  /usuarios:
+    get:
+      tags:
+        - usuario-controller
+      summary: Página de listar usuarios
+      operationId: listar
+      responses:
+        '200':
+          description: Redireciona para usuarios/listar
+          content:
+            text/html:
+              schema:
+                type: string
+  /usuarios/remover/{id}:
+    get:
+      tags:
+        - usuario-controller
+      summary: Página de exclusao de usuario
+      operationId: removerUsuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Redireciona para /usuarios
+          content:
+            text/html:
+              schema:
+                type: string
+  /usuarios/novo:
+    get:
+      tags:
+        - usuario-controller
+      summary: Página de novo usuario
+      operationId: novoUsuario
+      responses:
+        '200':
+          description: Redireciona para usuarios/formulario
+          content:
+            text/html:
+              schema:
+                type: string
+  /usuarios/editar/{id}:
+    get:
+      tags:
+        - usuario-controller
+      summary: Página de edicao de usuario
+      operationId: editarUsuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Redireciona para /usuarios/formulario
+          content:
+            text/html:
+              schema:
+                type: string
+  /usuarios/detalhes/{id}:
+    get:
+      tags:
+        - usuario-controller
+      summary: Página de detalhes do usuario
+      operationId: detalhesUsuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Redireciona para usuarios/detalhes
+          content:
+            text/html:
+              schema:
+                type: string
+  /sessoes/detalhes/{id}:
+    get:
+      tags:
+        - sessao-controller
+      summary: Página de detalhes da sessao
+      operationId: detalhesSessao
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Redireciona para /sessao/detalhes
+          content:
+            text/html:
+              schema:
+                type: string
+  /sessoes/cadastro:
+    get:
+      tags:
+        - sessao-controller
+      summary: Página de cadastro de nova sessao
+      operationId: formCadastro
+      parameters:
+        - name: projetoId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: estrategiaId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Redireciona para sessoes/formulario
+          content:
+            text/html:
+              schema:
+                type: string
+  /projetos/{projetoId}/estrategias/{estrategiaId}/sessoes:
+    get:
+      tags:
+        - sessao-controller
+      summary: Página de listagem de sessoes de um projeto com uma estratégia
+      operationId: listarSessoes
+      parameters:
+        - name: projetoId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: estrategiaId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Redireciona para sessoes/lista
+          content:
+            text/html:
+              schema:
+                type: string
+  /projetos/remover/{id}:
+    get:
+      tags:
+        - projeto-controller
+      summary: Página de remocao do projeto para usuario admin
+      operationId: removerProjeto
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Retorna a view /projetos/listar
+          content:
+            text/html:
+              schema:
+                type: string
+  /projetos/novo:
+    get:
+      tags:
+        - projeto-controller
+      summary: Página de criacao de novo projeto para usuarios admin
+      operationId: novo
+      responses:
+        '200':
+          description: Retorna a view projetos/formulario
+          content:
+            text/html:
+              schema:
+                type: string
+  /projetos/listar:
+    get:
+      tags:
+        - projeto-controller
+      summary: Página de visualizacao de todos os projetos
+      operationId: listar_1
+      responses:
+        '200':
+          description: Retorna a view projetos/listar
+          content:
+            text/html:
+              schema:
+                type: string
+  /projetos/editar/{id}:
+    get:
+      tags:
+        - projeto-controller
+      summary: Página de edicao de projeto para usuario admin
+      operationId: editar_1
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Retorna a view /projetos/listar
+          content:
+            text/html:
+              schema:
+                type: string
+  /projetos/detalhes/{id}:
+    get:
+      tags:
+        - projeto-controller
+      summary: Página de visualizacao de detalhes de um projeto
+      operationId: detalhes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Retorna a view /projetos/detalhes
+          content:
+            text/html:
+              schema:
+                type: string
+  /projetos/cadastro:
+    get:
+      tags:
+        - projeto-controller
+      summary: Página de cadastro de projeto
+      operationId: formCadastro_1
+      responses:
+        '200':
+          description: Retorna formulario
+          content:
+            text/html:
+              schema:
+                type: string
+  /login:
+    post:
+      tags:
+        - login-endpoint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Forbidden
+  /estrategias:
+    get:
+      tags:
+        - estrategia-controller
+      summary: Página de listagem das estrategias
+      operationId: listar_2
+      responses:
+        '200':
+          description: Retorna a view estrategias/listar
+          content:
+            text/html:
+              schema:
+                type: string
+  /estrategias/remover/{id}:
+    get:
+      tags:
+        - estrategia-controller
+      summary: Página de remocao da estrategia
+      operationId: remover
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Retorna a view /estrategias
+          content:
+            text/html:
+              schema:
+                type: string
+  /estrategias/public/estrategias:
+    get:
+      tags:
+        - estrategia-controller
+      summary: Página de listagem das estrategias publica
+      operationId: listarEstrategiasPublico
+      responses:
+        '200':
+          description: Retorna a view estrategias/list
+          content:
+            text/html:
+              schema:
+                type: string
+  /estrategias/novo:
+    get:
+      tags:
+        - estrategia-controller
+      summary: Página de nova estrategia
+      operationId: exibirFormularioNovo
+      responses:
+        '200':
+          description: Retorna a view estrategias/formulario
+          content:
+            text/html:
+              schema:
+                type: string
+  /estrategias/estrategias:
+    get:
+      tags:
+        - estrategia-controller
+      summary: Página de listagem das estrategias para usuarios autenticados
+      operationId: listarEstrategias
+      parameters:
+        - name: guest
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Retorna a view estrategias/list
+          content:
+            text/html:
+              schema:
+                type: string
+  /estrategias/estrategias/{id}:
+    get:
+      tags:
+        - estrategia-controller
+      summary: Página de detalhes da estrategia
+      operationId: detalheEstrategia
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Retorna a view /estrategias
+          content:
+            text/html:
+              schema:
+                type: string
+  /estrategias/editar/{id}:
+    get:
+      tags:
+        - estrategia-controller
+      summary: Página de edicao da estrategia
+      operationId: exibirFormularioEditar
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Retorna a view estrategias/formulario
+          content:
+            text/html:
+              schema:
+                type: string
+  /estrategias/detalhes/{id}:
+    get:
+      tags:
+        - estrategia-controller
+      summary: Página de detalhes da estrategia
+      operationId: detalhes_1
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Retorna a view estrategias/detalhes
+          content:
+            text/html:
+              schema:
+                type: string
+  /bugs/listar:
+    get:
+      tags:
+        - bug-controller
+      summary: Página de listagem dos bugs
+      operationId: listarTodos
+      responses:
+        '200':
+          description: Retorna a view bug/listar
+          content:
+            text/html:
+              schema:
+                type: string
+  /bugs/detalhes/{id}:
+    get:
+      tags:
+        - bug-controller
+      summary: Página de detalhes dos bugs
+      operationId: detalhesBug
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Retorna a view detalhes
+          content:
+            text/html:
+              schema:
+                type: string
+  /:
+    get:
+      tags:
+        - home-controller
+      summary: Página de Home
+      operationId: home
+      responses:
+        '200':
+          description: Retorna a view home
+          content:
+            text/html:
+              schema:
+                type: string
+components:
+  schemas:
+    GrantedAuthority:
+      type: object
+      properties:
+        authority:
+          type: string
+    UsuarioModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        email:
+          type: string
+        senha:
+          type: string
+        role:
+          type: string
+        enabled:
+          type: boolean
+        authorities:
+          type: array
+          items:
+            $ref: '#/components/schemas/GrantedAuthority'
+        password:
+          type: string
+        username:
+          type: string
+        credentialsNonExpired:
+          type: boolean
+        accountNonExpired:
+          type: boolean
+        accountNonLocked:
+          type: boolean
+    ProjetoCadastroDTO:
+      required:
+        - nome
+      type: object
+      properties:
+        nome:
+          type: string
+        descricao:
+          type: string
+        membrosIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+        estrategiasIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    ProjetoEdicaoDTO:
+      required:
+        - id
+        - nome
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        descricao:
+          type: string
+        membrosIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+        estrategiasIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    BugModel:
+      required:
+        - criticidade
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        descricao:
+          type: string
+        dataRegistro:
+          type: string
+          format: date-time
+        resolvido:
+          type: boolean
+        caminhoArquivo:
+          type: string
+        tipoArquivo:
+          type: string
+          enum:
+            - IMAGEM
+            - VIDEO
+        criticidade:
+          type: string
+          enum:
+            - BAIXA
+            - MEDIA
+            - CRITICA
+        sessao:
+          $ref: '#/components/schemas/SessaoModel'
+        caminhoVideo:
+          type: string
+        caminhoImagem:
+          type: string
+    DicaModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        texto:
+          type: string
+        estrategia:
+          $ref: '#/components/schemas/EstrategiaModel'
+    EstrategiaModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        descricao:
+          type: string
+        dicas:
+          type: array
+          items:
+            $ref: '#/components/schemas/DicaModel'
+        exemplos:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExemploModel'
+    ExemploModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        texto:
+          type: string
+        urlImagem:
+          type: string
+        estrategia:
+          $ref: '#/components/schemas/EstrategiaModel'
+    ProjetoModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        descricao:
+          type: string
+        estrategias:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/EstrategiaModel'
+        membros:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/UsuarioModel'
+        nomesMembros:
+          type: string
+    SessaoModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        descricao:
+          type: string
+        duracao:
+          type: object
+          properties:
+            seconds:
+              type: integer
+              format: int64
+            zero:
+              type: boolean
+            nano:
+              type: integer
+              format: int32
+            negative:
+              type: boolean
+            positive:
+              type: boolean
+            units:
+              type: array
+              items:
+                type: object
+                properties:
+                  durationEstimated:
+                    type: boolean
+                  timeBased:
+                    type: boolean
+                  dateBased:
+                    type: boolean
+        projeto:
+          $ref: '#/components/schemas/ProjetoModel'
+        estrategia:
+          $ref: '#/components/schemas/EstrategiaModel'
+        bugs:
+          type: array
+          items:
+            $ref: '#/components/schemas/BugModel'
+        tester:
+          $ref: '#/components/schemas/UsuarioModel'
+        status:
+          type: string
+          enum:
+            - CRIADO
+            - EM_EXECUCAO
+            - FINALIZADO
+        dataCriacao:
+          type: string
+          format: date-time
+        dataInicioExecucao:
+          type: string
+          format: date-time
+        dataFinalizacao:
+          type: string
+          format: date-time

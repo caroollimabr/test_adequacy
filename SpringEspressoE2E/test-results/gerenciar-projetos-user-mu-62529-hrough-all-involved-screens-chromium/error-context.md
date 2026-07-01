@@ -1,0 +1,45 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e3]:
+    - heading "☕ Spring Espresso Game Testing" [level=1] [ref=e5]
+    - button "Sair" [ref=e8] [cursor=pointer]
+  - generic [ref=e9]:
+    - heading "Cadastrar Novo Bug" [level=1] [ref=e10]
+    - paragraph [ref=e12]: "Erro ao cadastrar bug: uploads\\bugs\\Bug_13_S122.png"
+    - generic [ref=e13]:
+      - heading "Informações da Sessão" [level=3] [ref=e14]
+      - paragraph [ref=e15]:
+        - strong [ref=e16]: "Projeto:"
+        - text: Projeto Alpha
+      - paragraph [ref=e17]:
+        - strong [ref=e18]: "Estratégia:"
+        - text: Noob Journey
+      - paragraph [ref=e19]:
+        - strong [ref=e20]: "Descrição da Sessão:"
+        - text: SessãoTesteUser1 Dado que blabla Quando blabla Então blabla
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic [ref=e23]: "Descrição do Bug: *"
+        - 'textbox "Descrição do Bug: *" [ref=e24]':
+          - /placeholder: Descreva detalhadamente o bug encontrado...
+      - generic [ref=e25]:
+        - generic [ref=e26]: "Criticidade:"
+        - combobox "Criticidade:" [ref=e27]:
+          - option [selected]
+          - option "Baixa"
+          - option "Média"
+          - option "Crítica"
+      - generic [ref=e28]:
+        - generic [ref=e29]: "Anexar Arquivo (Imagem ou Vídeo):"
+        - button "Anexar Arquivo (Imagem ou Vídeo):" [ref=e30]
+        - text: "Formatos aceitos: JPG, PNG, GIF, MP4, WEBM (máx. 5MB)"
+      - generic [ref=e31]:
+        - button "Cadastrar Bug" [ref=e32] [cursor=pointer]
+        - link "Cancelar" [ref=e33] [cursor=pointer]:
+          - /url: /sessoes/detalhes/122
+  - contentinfo [ref=e34]:
+    - paragraph [ref=e35]: Spring Espresso Game Testing. Um Software Open-source para a disciplina de Desenvolvimento Web.
+    - paragraph [ref=e36]: Desenvolvido com café e paixão!
+```

@@ -1,0 +1,53 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e3]:
+    - heading "☕ Spring Espresso Game Testing" [level=1] [ref=e5]
+    - button "Sair" [ref=e8] [cursor=pointer]
+  - generic [ref=e9]:
+    - heading "Lista de Estratégias" [level=1] [ref=e10]
+    - paragraph [ref=e12]: Estratégia salva com sucesso!
+    - link "Adicionar Nova Estratégia" [ref=e14] [cursor=pointer]:
+      - /url: /estrategias/novo
+    - generic [ref=e16]:
+      - link "Newbie" [ref=e18] [cursor=pointer]:
+        - /url: /estrategias/detalhes/1
+      - link "Golden Path" [ref=e20] [cursor=pointer]:
+        - /url: /estrategias/detalhes/2
+      - link "Noob Journey" [ref=e22] [cursor=pointer]:
+        - /url: /estrategias/detalhes/3
+      - link "Completionist" [ref=e24] [cursor=pointer]:
+        - /url: /estrategias/detalhes/4
+      - link "Stress Test" [ref=e26] [cursor=pointer]:
+        - /url: /estrategias/detalhes/5
+      - link "Speedrun" [ref=e28] [cursor=pointer]:
+        - /url: /estrategias/detalhes/6
+      - link "User Interface" [ref=e30] [cursor=pointer]:
+        - /url: /estrategias/detalhes/7
+      - link "Neighboring" [ref=e32] [cursor=pointer]:
+        - /url: /estrategias/detalhes/8
+      - link "Overtime" [ref=e34] [cursor=pointer]:
+        - /url: /estrategias/detalhes/9
+      - link "Automated Testing" [ref=e36] [cursor=pointer]:
+        - /url: /estrategias/detalhes/10
+      - link "EstrategiaTeste1" [ref=e38] [cursor=pointer]:
+        - /url: /estrategias/detalhes/11
+      - link "EstrategiaTeste4" [ref=e40] [cursor=pointer]:
+        - /url: /estrategias/detalhes/13
+      - link "EstrategiaTeste1" [ref=e42] [cursor=pointer]:
+        - /url: /estrategias/detalhes/14
+      - link "EstrategiaTeste4" [ref=e44] [cursor=pointer]:
+        - /url: /estrategias/detalhes/16
+      - link "EstrategiaTeste1" [ref=e46] [cursor=pointer]:
+        - /url: /estrategias/detalhes/17
+      - link "EstrategiaTeste4" [ref=e48] [cursor=pointer]:
+        - /url: /estrategias/detalhes/19
+      - link "EstrategiaTeste1" [ref=e50] [cursor=pointer]:
+        - /url: /estrategias/detalhes/20
+    - link "Main Menu" [ref=e52] [cursor=pointer]:
+      - /url: /
+  - contentinfo [ref=e53]:
+    - paragraph [ref=e54]: Spring Espresso Game Testing. Um Software Open-source para a disciplina de Desenvolvimento Web.
+    - paragraph [ref=e55]: Desenvolvido com café e paixão!
+```

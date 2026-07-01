@@ -1,0 +1,18 @@
+{
+  "name": "springespressoe2e",
+  "version": "1.0.0",
+  "description": "System/E2E web tests for the SpringEspresso website",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.5.0"
+  },
+  "dependencies": {
+    "mysql2": "^3.20.0",
+    "pg": "^8.20.0"
+  }
+}

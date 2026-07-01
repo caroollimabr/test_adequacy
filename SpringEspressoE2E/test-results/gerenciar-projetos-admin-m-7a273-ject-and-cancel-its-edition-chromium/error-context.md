@@ -1,0 +1,248 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e3]:
+    - heading "☕ Spring Espresso Game Testing" [level=1] [ref=e5]
+    - button "Sair" [ref=e8] [cursor=pointer]
+  - generic [ref=e9]:
+    - heading "Todos os Projetos (Administrador)" [level=1] [ref=e10]
+    - paragraph [ref=e12]: Projeto cadastrado com sucesso!
+    - paragraph [ref=e13]: Como administrador, você pode visualizar e gerenciar todos os projetos do sistema.
+    - link "Novo Projeto" [ref=e15] [cursor=pointer]:
+      - /url: /projetos/novo
+    - table [ref=e18]:
+      - rowgroup [ref=e19]:
+        - row "Nome Descrição Medalhas por Estratégias Membros Ações" [ref=e20]:
+          - columnheader "Nome" [ref=e21]
+          - columnheader "Descrição" [ref=e22]
+          - columnheader "Medalhas por Estratégias" [ref=e23]
+          - columnheader "Membros" [ref=e24]
+          - columnheader "Ações" [ref=e25]
+      - rowgroup [ref=e26]:
+        - row "Projeto Alpha Teste Projeto Alpha 1 x🥇 5 x🥈 3 x🥉 Maria Silva Leandro Salto Ver Detalhes Editar Remover" [ref=e27]:
+          - cell "Projeto Alpha" [ref=e28]
+          - cell "Teste Projeto Alpha" [ref=e29]
+          - cell "1 x🥇 5 x🥈 3 x🥉" [ref=e30]:
+            - generic [ref=e32]:
+              - generic "1 estratégia(s) com 10+ sessões finalizadas" [ref=e33]:
+                - generic [ref=e34]: "1"
+                - text: x🥇
+              - generic "5 estratégia(s) com 5-9 sessões finalizadas" [ref=e35]:
+                - generic [ref=e36]: "5"
+                - text: x🥈
+              - generic "3 estratégia(s) com 1-4 sessões finalizadas" [ref=e37]:
+                - generic [ref=e38]: "3"
+                - text: x🥉
+          - cell "Maria Silva Leandro Salto" [ref=e39]:
+            - generic [ref=e40]:
+              - generic [ref=e41]: Maria Silva
+              - generic [ref=e42]: Leandro Salto
+          - cell "Ver Detalhes Editar Remover" [ref=e43]:
+            - link "Ver Detalhes" [ref=e44] [cursor=pointer]:
+              - /url: /projetos/detalhes/1
+            - generic [ref=e45]:
+              - link "Editar" [ref=e46] [cursor=pointer]:
+                - /url: /projetos/editar/1
+              - link "Remover" [ref=e47] [cursor=pointer]:
+                - /url: /projetos/remover/1
+        - row "Projeto Beta Teste Projeto Beta 2 x🥇 4 x🥈 4 x🥉 Maria Silva Ver Detalhes Editar Remover" [ref=e48]:
+          - cell "Projeto Beta" [ref=e49]
+          - cell "Teste Projeto Beta" [ref=e50]
+          - cell "2 x🥇 4 x🥈 4 x🥉" [ref=e51]:
+            - generic [ref=e53]:
+              - generic "2 estratégia(s) com 10+ sessões finalizadas" [ref=e54]:
+                - generic [ref=e55]: "2"
+                - text: x🥇
+              - generic "4 estratégia(s) com 5-9 sessões finalizadas" [ref=e56]:
+                - generic [ref=e57]: "4"
+                - text: x🥈
+              - generic "4 estratégia(s) com 1-4 sessões finalizadas" [ref=e58]:
+                - generic [ref=e59]: "4"
+                - text: x🥉
+          - cell "Maria Silva" [ref=e60]:
+            - generic [ref=e62]: Maria Silva
+          - cell "Ver Detalhes Editar Remover" [ref=e63]:
+            - link "Ver Detalhes" [ref=e64] [cursor=pointer]:
+              - /url: /projetos/detalhes/2
+            - generic [ref=e65]:
+              - link "Editar" [ref=e66] [cursor=pointer]:
+                - /url: /projetos/editar/2
+              - link "Remover" [ref=e67] [cursor=pointer]:
+                - /url: /projetos/remover/2
+        - row "ProjetoTesteAdmin22 DescricaoProjetoTesteAdmin22 1 x🥉 Admin Ver Detalhes Editar Remover" [ref=e68]:
+          - cell "ProjetoTesteAdmin22" [ref=e69]
+          - cell "DescricaoProjetoTesteAdmin22" [ref=e70]
+          - cell "1 x🥉" [ref=e71]:
+            - generic "1 estratégia(s) com 1-4 sessões finalizadas" [ref=e74]:
+              - generic [ref=e75]: "1"
+              - text: x🥉
+          - cell "Admin" [ref=e76]:
+            - generic [ref=e78]: Admin
+          - cell "Ver Detalhes Editar Remover" [ref=e79]:
+            - link "Ver Detalhes" [ref=e80] [cursor=pointer]:
+              - /url: /projetos/detalhes/3
+            - generic [ref=e81]:
+              - link "Editar" [ref=e82] [cursor=pointer]:
+                - /url: /projetos/editar/3
+              - link "Remover" [ref=e83] [cursor=pointer]:
+                - /url: /projetos/remover/3
+        - row "ProjetoTesteAdmin3 DescricaoProjetoTesteAdmin3 Nenhuma sessão finalizada Maria Silva Admin Ver Detalhes Editar Remover" [ref=e84]:
+          - cell "ProjetoTesteAdmin3" [ref=e85]
+          - cell "DescricaoProjetoTesteAdmin3" [ref=e86]
+          - cell "Nenhuma sessão finalizada" [ref=e87]:
+            - generic [ref=e89]: Nenhuma sessão finalizada
+          - cell "Maria Silva Admin" [ref=e90]:
+            - generic [ref=e91]:
+              - generic [ref=e92]: Maria Silva
+              - generic [ref=e93]: Admin
+          - cell "Ver Detalhes Editar Remover" [ref=e94]:
+            - link "Ver Detalhes" [ref=e95] [cursor=pointer]:
+              - /url: /projetos/detalhes/4
+            - generic [ref=e96]:
+              - link "Editar" [ref=e97] [cursor=pointer]:
+                - /url: /projetos/editar/4
+              - link "Remover" [ref=e98] [cursor=pointer]:
+                - /url: /projetos/remover/4
+        - row "ProjetoTesteAdmin5 DescricaoProjetoTesteAdmin5 Nenhuma sessão finalizada Maria Silva Admin Ver Detalhes Editar Remover" [ref=e99]:
+          - cell "ProjetoTesteAdmin5" [ref=e100]
+          - cell "DescricaoProjetoTesteAdmin5" [ref=e101]
+          - cell "Nenhuma sessão finalizada" [ref=e102]:
+            - generic [ref=e104]: Nenhuma sessão finalizada
+          - cell "Maria Silva Admin" [ref=e105]:
+            - generic [ref=e106]:
+              - generic [ref=e107]: Maria Silva
+              - generic [ref=e108]: Admin
+          - cell "Ver Detalhes Editar Remover" [ref=e109]:
+            - link "Ver Detalhes" [ref=e110] [cursor=pointer]:
+              - /url: /projetos/detalhes/6
+            - generic [ref=e111]:
+              - link "Editar" [ref=e112] [cursor=pointer]:
+                - /url: /projetos/editar/6
+              - link "Remover" [ref=e113] [cursor=pointer]:
+                - /url: /projetos/remover/6
+        - row "ProjetoTesteAdmin2 DescricaoProjetoTesteAdmin2 Nenhuma sessão finalizada Maria Silva Admin Ver Detalhes Editar Remover" [ref=e114]:
+          - cell "ProjetoTesteAdmin2" [ref=e115]
+          - cell "DescricaoProjetoTesteAdmin2" [ref=e116]
+          - cell "Nenhuma sessão finalizada" [ref=e117]:
+            - generic [ref=e119]: Nenhuma sessão finalizada
+          - cell "Maria Silva Admin" [ref=e120]:
+            - generic [ref=e121]:
+              - generic [ref=e122]: Maria Silva
+              - generic [ref=e123]: Admin
+          - cell "Ver Detalhes Editar Remover" [ref=e124]:
+            - link "Ver Detalhes" [ref=e125] [cursor=pointer]:
+              - /url: /projetos/detalhes/7
+            - generic [ref=e126]:
+              - link "Editar" [ref=e127] [cursor=pointer]:
+                - /url: /projetos/editar/7
+              - link "Remover" [ref=e128] [cursor=pointer]:
+                - /url: /projetos/remover/7
+        - row "ProjetoTesteAdmin3 DescricaoProjetoTesteAdmin3 Nenhuma sessão finalizada Maria Silva Admin Ver Detalhes Editar Remover" [ref=e129]:
+          - cell "ProjetoTesteAdmin3" [ref=e130]
+          - cell "DescricaoProjetoTesteAdmin3" [ref=e131]
+          - cell "Nenhuma sessão finalizada" [ref=e132]:
+            - generic [ref=e134]: Nenhuma sessão finalizada
+          - cell "Maria Silva Admin" [ref=e135]:
+            - generic [ref=e136]:
+              - generic [ref=e137]: Maria Silva
+              - generic [ref=e138]: Admin
+          - cell "Ver Detalhes Editar Remover" [ref=e139]:
+            - link "Ver Detalhes" [ref=e140] [cursor=pointer]:
+              - /url: /projetos/detalhes/8
+            - generic [ref=e141]:
+              - link "Editar" [ref=e142] [cursor=pointer]:
+                - /url: /projetos/editar/8
+              - link "Remover" [ref=e143] [cursor=pointer]:
+                - /url: /projetos/remover/8
+        - row "ProjetoTesteAdmin2 DescricaoProjetoTesteAdmin2 Nenhuma sessão finalizada Maria Silva Admin Ver Detalhes Editar Remover" [ref=e144]:
+          - cell "ProjetoTesteAdmin2" [ref=e145]
+          - cell "DescricaoProjetoTesteAdmin2" [ref=e146]
+          - cell "Nenhuma sessão finalizada" [ref=e147]:
+            - generic [ref=e149]: Nenhuma sessão finalizada
+          - cell "Maria Silva Admin" [ref=e150]:
+            - generic [ref=e151]:
+              - generic [ref=e152]: Maria Silva
+              - generic [ref=e153]: Admin
+          - cell "Ver Detalhes Editar Remover" [ref=e154]:
+            - link "Ver Detalhes" [ref=e155] [cursor=pointer]:
+              - /url: /projetos/detalhes/10
+            - generic [ref=e156]:
+              - link "Editar" [ref=e157] [cursor=pointer]:
+                - /url: /projetos/editar/10
+              - link "Remover" [ref=e158] [cursor=pointer]:
+                - /url: /projetos/remover/10
+        - row "ProjetoTesteAdmin3 DescricaoProjetoTesteAdmin3 Nenhuma sessão finalizada Maria Silva Admin Ver Detalhes Editar Remover" [ref=e159]:
+          - cell "ProjetoTesteAdmin3" [ref=e160]
+          - cell "DescricaoProjetoTesteAdmin3" [ref=e161]
+          - cell "Nenhuma sessão finalizada" [ref=e162]:
+            - generic [ref=e164]: Nenhuma sessão finalizada
+          - cell "Maria Silva Admin" [ref=e165]:
+            - generic [ref=e166]:
+              - generic [ref=e167]: Maria Silva
+              - generic [ref=e168]: Admin
+          - cell "Ver Detalhes Editar Remover" [ref=e169]:
+            - link "Ver Detalhes" [ref=e170] [cursor=pointer]:
+              - /url: /projetos/detalhes/11
+            - generic [ref=e171]:
+              - link "Editar" [ref=e172] [cursor=pointer]:
+                - /url: /projetos/editar/11
+              - link "Remover" [ref=e173] [cursor=pointer]:
+                - /url: /projetos/remover/11
+        - row "ProjetoTesteAdmin5 DescricaoProjetoTesteAdmin5 Nenhuma sessão finalizada Maria Silva Admin Ver Detalhes Editar Remover" [ref=e174]:
+          - cell "ProjetoTesteAdmin5" [ref=e175]
+          - cell "DescricaoProjetoTesteAdmin5" [ref=e176]
+          - cell "Nenhuma sessão finalizada" [ref=e177]:
+            - generic [ref=e179]: Nenhuma sessão finalizada
+          - cell "Maria Silva Admin" [ref=e180]:
+            - generic [ref=e181]:
+              - generic [ref=e182]: Maria Silva
+              - generic [ref=e183]: Admin
+          - cell "Ver Detalhes Editar Remover" [ref=e184]:
+            - link "Ver Detalhes" [ref=e185] [cursor=pointer]:
+              - /url: /projetos/detalhes/13
+            - generic [ref=e186]:
+              - link "Editar" [ref=e187] [cursor=pointer]:
+                - /url: /projetos/editar/13
+              - link "Remover" [ref=e188] [cursor=pointer]:
+                - /url: /projetos/remover/13
+        - row "ProjetoTesteAdmin2 DescricaoProjetoTesteAdmin2 Nenhuma sessão finalizada Maria Silva Admin Ver Detalhes Editar Remover" [ref=e189]:
+          - cell "ProjetoTesteAdmin2" [ref=e190]
+          - cell "DescricaoProjetoTesteAdmin2" [ref=e191]
+          - cell "Nenhuma sessão finalizada" [ref=e192]:
+            - generic [ref=e194]: Nenhuma sessão finalizada
+          - cell "Maria Silva Admin" [ref=e195]:
+            - generic [ref=e196]:
+              - generic [ref=e197]: Maria Silva
+              - generic [ref=e198]: Admin
+          - cell "Ver Detalhes Editar Remover" [ref=e199]:
+            - link "Ver Detalhes" [ref=e200] [cursor=pointer]:
+              - /url: /projetos/detalhes/14
+            - generic [ref=e201]:
+              - link "Editar" [ref=e202] [cursor=pointer]:
+                - /url: /projetos/editar/14
+              - link "Remover" [ref=e203] [cursor=pointer]:
+                - /url: /projetos/remover/14
+        - row "ProjetoTesteAdmin3 DescricaoProjetoTesteAdmin3 Nenhuma sessão finalizada Maria Silva Admin Ver Detalhes Editar Remover" [ref=e204]:
+          - cell "ProjetoTesteAdmin3" [ref=e205]
+          - cell "DescricaoProjetoTesteAdmin3" [ref=e206]
+          - cell "Nenhuma sessão finalizada" [ref=e207]:
+            - generic [ref=e209]: Nenhuma sessão finalizada
+          - cell "Maria Silva Admin" [ref=e210]:
+            - generic [ref=e211]:
+              - generic [ref=e212]: Maria Silva
+              - generic [ref=e213]: Admin
+          - cell "Ver Detalhes Editar Remover" [ref=e214]:
+            - link "Ver Detalhes" [ref=e215] [cursor=pointer]:
+              - /url: /projetos/detalhes/15
+            - generic [ref=e216]:
+              - link "Editar" [ref=e217] [cursor=pointer]:
+                - /url: /projetos/editar/15
+              - link "Remover" [ref=e218] [cursor=pointer]:
+                - /url: /projetos/remover/15
+    - link "Main Menu" [ref=e220] [cursor=pointer]:
+      - /url: /
+  - contentinfo [ref=e221]:
+    - paragraph [ref=e222]: Spring Espresso Game Testing. Um Software Open-source para a disciplina de Desenvolvimento Web.
+    - paragraph [ref=e223]: Desenvolvido com café e paixão!
+```

@@ -1,0 +1,11 @@
+id;description
+"REQ-01";"CRUD de testadores (requer login de administrador)."
+"REQ-02";"CRUD de administradores (requer login de administrador)."
+"REQ-03";"Cadastro de projetos (requer login de administrador)."
+"REQ-04";"Listagem de projetos em uma única página (login a depender de permissão). O sistema deve prover ordenação de projetos (ordem alfabética, data de criação, etc)."
+"REQ-05";"Cadastro de estratégias (requer login de administrador)."
+"REQ-06";"Listagem de todas as estratégias (não requer login)."
+"REQ-07";"Cadastro de sessões de teste (requer login de testador)."
+"REQ-08";"Gerenciamento do ciclo de vida da sessão de teste."
+"REQ-09";"Listagem de sessões de teste de um projeto em uma única página, respeitando as permissões de visualização."
+"REQ-10";"O sistema deve ser internacionalizado em pelo menos dois idiomas: português e inglês."
