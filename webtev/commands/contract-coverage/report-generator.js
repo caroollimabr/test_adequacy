@@ -80,7 +80,7 @@ export function generateHTMLReport(percentage, covered, missed, undocumented) {
   <body>
     <h1>Contract Coverage Evaluator</h1>
     <div class="card">
-      <h2>Contract Coverage Percentage</h2>
+      <h2>Endpoint Coverage Percentage</h2>
       <div class="percentage">${percentage}%</div>
       <p>From the total of ${covered.length + missed.length} documented endpoints, ${covered.length} were accessed through the tests.</p>
     </div>
